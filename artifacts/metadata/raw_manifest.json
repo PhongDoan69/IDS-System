@@ -1,0 +1,32 @@
+[
+  {
+    "file": "monday.csv",
+    "path": "D:\\CAO HOC\\IDS System\\CICIDS2017\\monday.csv",
+    "bytes": 146143601,
+    "sha256": "c493314d7f2cd5614193d3fd8de6d0731edfe1383ccf24df0323c8c6899ba7ab"
+  },
+  {
+    "file": "tuesday.csv",
+    "path": "D:\\CAO HOC\\IDS System\\CICIDS2017\\tuesday.csv",
+    "bytes": 125393583,
+    "sha256": "664b615572fdbd88ae24d01f33a538983277359151e9fd5172d40da092362f71"
+  },
+  {
+    "file": "wednesday.csv",
+    "path": "D:\\CAO HOC\\IDS System\\CICIDS2017\\wednesday.csv",
+    "bytes": 206984560,
+    "sha256": "87c6ab27cef32df2dcac315ecd992f918484e71856f32b0d2a55eb171a774d60"
+  },
+  {
+    "file": "thursday.csv",
+    "path": "D:\\CAO HOC\\IDS System\\CICIDS2017\\thursday.csv",
+    "bytes": 132500204,
+    "sha256": "e3cac669f495df33da7ae1e8fcc06ed511d3161b97a7ba9263f2d476cf467a0e"
+  },
+  {
+    "file": "friday.csv",
+    "path": "D:\\CAO HOC\\IDS System\\CICIDS2017\\friday.csv",
+    "bytes": 199983721,
+    "sha256": "e16fa2655766ed685fe3e43455d7e4024a81f8a1965c1eabf56e53dc9f07fb6b"
+  }
+]

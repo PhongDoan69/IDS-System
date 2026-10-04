@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Large source assets are preserved locally but not committed.
+CICIDS2017/*.csv
+Tài liệu tham khảo/*.pdf
+
+# Generated data and experiment artifacts
+data/interim/*
+data/processed/*
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+models/*
+!models/.gitkeep
+artifacts/preprocessors/*
+artifacts/thresholds/*
+!artifacts/preprocessors/.gitkeep
+!artifacts/thresholds/.gitkeep

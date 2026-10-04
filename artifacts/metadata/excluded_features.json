@@ -1,0 +1,29 @@
+{
+  "excluded_features": [
+    {
+      "name": "Label",
+      "reason": "Prediction target; including it would be direct target leakage."
+    },
+    {
+      "name": "Attempted Category",
+      "reason": "Target-adjacent annotation that directly identifies attempted attack status."
+    },
+    {
+      "name": "Timestamp",
+      "reason": "Scenario/time identifier with strong risk of learning the collection schedule."
+    },
+    {
+      "name": "Src IP dec",
+      "reason": "Laboratory host identifier with high environment-specific leakage risk."
+    },
+    {
+      "name": "Dst IP dec",
+      "reason": "Laboratory host identifier with high environment-specific leakage risk."
+    }
+  ],
+  "retained_for_ablation": [
+    "Src Port",
+    "Dst Port",
+    "Protocol"
+  ]
+}

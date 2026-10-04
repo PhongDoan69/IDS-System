@@ -1,0 +1,10 @@
+{
+  "random_state": 42,
+  "ratios": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "sample_count": 2096804,
+  "max_rows_per_file": null
+}

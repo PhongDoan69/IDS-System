@@ -1,0 +1,82 @@
+attack_label_id,attack_label,split,count
+0,BENIGN,train,1107775
+0,BENIGN,validation,237380
+0,BENIGN,test,237380
+1,FTP-Patator - Attempted,train,8
+1,FTP-Patator - Attempted,validation,2
+1,FTP-Patator - Attempted,test,2
+2,FTP-Patator,train,2780
+2,FTP-Patator,validation,596
+2,FTP-Patator,test,596
+3,SSH-Patator,train,2073
+3,SSH-Patator,validation,444
+3,SSH-Patator,test,444
+4,SSH-Patator - Attempted,train,19
+4,SSH-Patator - Attempted,validation,4
+4,SSH-Patator - Attempted,test,4
+5,DoS Slowloris,train,2701
+5,DoS Slowloris,validation,579
+5,DoS Slowloris,test,579
+6,DoS Slowloris - Attempted,train,1293
+6,DoS Slowloris - Attempted,validation,277
+6,DoS Slowloris - Attempted,test,277
+7,DoS Slowhttptest,train,1218
+7,DoS Slowhttptest,validation,261
+7,DoS Slowhttptest,test,261
+8,DoS Slowhttptest - Attempted,train,2358
+8,DoS Slowhttptest - Attempted,validation,505
+8,DoS Slowhttptest - Attempted,test,505
+9,DoS Hulk,train,110928
+9,DoS Hulk,validation,23770
+9,DoS Hulk,test,23770
+10,DoS Hulk - Attempted,train,407
+10,DoS Hulk - Attempted,validation,87
+10,DoS Hulk - Attempted,test,87
+11,DoS GoldenEye,train,5297
+11,DoS GoldenEye,validation,1135
+11,DoS GoldenEye,test,1135
+12,Heartbleed,train,7
+12,Heartbleed,validation,2
+12,Heartbleed,test,2
+13,DoS GoldenEye - Attempted,train,56
+13,DoS GoldenEye - Attempted,validation,12
+13,DoS GoldenEye - Attempted,test,12
+14,Web Attack - Brute Force - Attempted,train,904
+14,Web Attack - Brute Force - Attempted,validation,194
+14,Web Attack - Brute Force - Attempted,test,194
+15,Web Attack - Brute Force,train,51
+15,Web Attack - Brute Force,validation,11
+15,Web Attack - Brute Force,test,11
+16,Infiltration - Attempted,train,31
+16,Infiltration - Attempted,validation,7
+16,Infiltration - Attempted,test,7
+17,Infiltration,train,26
+17,Infiltration,validation,5
+17,Infiltration,test,5
+18,Infiltration - Portscan,train,48038
+18,Infiltration - Portscan,validation,10294
+18,Infiltration - Portscan,test,10294
+19,Web Attack - XSS - Attempted,train,459
+19,Web Attack - XSS - Attempted,validation,98
+19,Web Attack - XSS - Attempted,test,98
+20,Web Attack - XSS,train,12
+20,Web Attack - XSS,validation,3
+20,Web Attack - XSS,test,3
+21,Web Attack - SQL Injection - Attempted,train,3
+21,Web Attack - SQL Injection - Attempted,validation,1
+21,Web Attack - SQL Injection - Attempted,test,1
+22,Web Attack - SQL Injection,train,9
+22,Web Attack - SQL Injection,validation,2
+22,Web Attack - SQL Injection,test,2
+23,Botnet - Attempted,train,2847
+23,Botnet - Attempted,validation,610
+23,Botnet - Attempted,test,610
+24,Botnet,train,516
+24,Botnet,validation,110
+24,Botnet,test,110
+25,Portscan,train,111346
+25,Portscan,validation,23860
+25,Portscan,test,23860
+26,DDoS,train,66600
+26,DDoS,validation,14272
+26,DDoS,test,14272
