@@ -1,78 +1,43 @@
 # IDS System - CICIDS2017 Research Pipeline
 
-This repository implements the experimental pipeline for a master's thesis on
-machine-learning-based intrusion detection. The current completed scope is Phase 2:
-dataset audit, non-lossy label derivation, leakage-aware feature selection,
-reproducible train/validation/test splitting, and train-only scaling.
+Pipeline thực nghiệm cho luận văn thạc sĩ về hệ thống phát hiện xâm nhập kết hợp mô
+hình máy học. Phase 2 đã hoàn tất làm sạch, bảo toàn 27 nhãn, loại rò rỉ đặc trưng,
+chia train/validation/test cố định và scale chỉ trên train.
 
-No raw file under `CICIDS2017/` is modified.
+Phần mã Phase 3-6 hiện đã sẵn sàng để người dùng chủ động chạy trong Visual Studio
+Code. Mã không tự huấn luyện khi import và mọi script đều có chế độ `--check-only`.
 
-## Dataset
+## Cấu trúc mô hình
 
-Place these five verified CSV files under `CICIDS2017/`:
+1. Autoencoder học latent 16 chiều từ 84 đặc trưng đã scale.
+2. Stage 1 so sánh XGBoost/MLP cho BENIGN vs ATTACK và sinh `P_attack` OOF.
+3. Stage 2 so sánh latent-only với latent + `P_attack` cho phân loại đa lớp tấn công.
+4. Novelty detection dùng LOACO, max probability, One-Class SVM và Isolation Forest.
+5. Đánh giá end-to-end sinh BENIGN, lớp tấn công đã biết hoặc UNKNOWN_ATTACK.
 
-- `monday.csv`
-- `tuesday.csv`
-- `wednesday.csv`
-- `thursday.csv`
-- `friday.csv`
+## Bắt đầu
 
-The pipeline deliberately ignores legacy merged/preprocessed CSV files because their
-delimiter and header integrity has not been established.
-
-## Environment
-
-Install a normal 64-bit Python 3.10-3.12 distribution first, then run:
+Máy cần Python 3.12 64-bit. Từ terminal VS Code:
 
 ```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-```
-
-For a CUDA-specific PyTorch wheel, follow the official PyTorch selector for the CUDA
-version installed on the machine instead of assuming that a local-version wheel is
-available from PyPI.
-
-## Phase 2 commands
-
-Audit without modifying raw data:
-
-```powershell
-.\.venv\Scripts\python.exe scripts\00_audit_dataset.py --config configs\base.json
-```
-
-Smoke preparation (1,000 rows per source file):
-
-```powershell
-.\.venv\Scripts\python.exe scripts\01_prepare_data.py --config configs\base.json --max-rows-per-file 1000 --output-dir data\interim\smoke
-```
-
-Full preparation:
-
-```powershell
-.\.venv\Scripts\python.exe scripts\01_prepare_data.py --config configs\base.json
-```
-
-Tests:
-
-```powershell
+powershell -ExecutionPolicy Bypass -File scripts\setup_windows_cuda.ps1
+.\.venv\Scripts\python.exe scripts\verify_environment.py
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe scripts\02_train_autoencoder.py --check-only
 ```
 
-## Leakage controls
+Quy trình, lệnh chạy đầy đủ, LOACO và lưu ý GPU nằm tại
+[`docs/TRAINING_GUIDE.md`](docs/TRAINING_GUIDE.md).
 
-- Exact duplicate rows are removed before splitting.
-- `Label`, `Attempted Category`, `Timestamp`, `Src IP dec`, and `Dst IP dec` are
-  excluded from the main feature matrix with reasons stored in
-  `artifacts/metadata/excluded_features.json`.
-- Attempted labels are preserved rather than silently merged.
-- The scaler is fitted only on rows assigned to the training split.
-- Validation and test rows are transformed using the frozen training scaler.
-- Split IDs and row hashes are saved for reuse by all subsequent experiments.
+## Nguyên tắc chống leakage
 
-## Planned later phases
+- Exact duplicate được loại trước khi split.
+- Scaler chỉ fit trên train; validation/test dùng scaler đã đóng băng.
+- Stage 1 dùng 5-fold OOF cho xác suất train đưa sang Stage 2.
+- Calibration chỉ fit bằng OOF train.
+- Early stopping và threshold chỉ dùng validation.
+- Test không tham gia fit, calibration, chọn epoch hoặc chọn ngưỡng.
+- Với LOACO, lớp held-out phải bị loại khỏi train/validation của AE, Stage 1 và Stage 2.
 
-Phase 3 onward will add the Autoencoder, raw-feature baselines, Stage 1 XGBoost/MLP,
-OOF attack probabilities, Stage 2 multiclass classification, and leave-one-attack-class-out
-novelty experiments. These models are intentionally not implemented in Phase 2.
+Raw CSV trong `CICIDS2017/` không bị sửa đổi. Model, latent và các artifact lớn được
+Git ignore theo mặc định.

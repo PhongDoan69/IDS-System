@@ -4,11 +4,11 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# Large source assets are preserved locally but not committed.
+# Dữ liệu nguồn lớn, giữ tại máy nhưng không commit.
 CICIDS2017/*.csv
 Tài liệu tham khảo/*.pdf
 
-# Generated data and experiment artifacts
+# Dữ liệu trung gian và model sinh lại được.
 data/interim/*
 data/processed/*
 !data/interim/.gitkeep
@@ -19,3 +19,7 @@ artifacts/preprocessors/*
 artifacts/thresholds/*
 !artifacts/preprocessors/.gitkeep
 !artifacts/thresholds/.gitkeep
+
+# Giữ JSON/CSV metric nhỏ; bỏ xác suất, novelty score và prediction cỡ lớn.
+results/**/*.npy
+results/**/*.csv.gz

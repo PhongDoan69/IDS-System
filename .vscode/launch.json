@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "IDS: Verify CUDA environment",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\scripts\\verify_environment.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "IDS: Check Autoencoder only",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\scripts\\02_train_autoencoder.py",
+      "args": ["--check-only"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "IDS: Train Autoencoder main",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\scripts\\02_train_autoencoder.py",
+      "args": ["--run-id", "main"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "IDS: Stage1 XGBoost latent main",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\scripts\\03_train_stage1.py",
+      "args": ["--run-id", "main", "--model", "xgboost", "--representation", "latent"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
+

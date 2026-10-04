@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "IDS: 0 - Setup CUDA environment",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\setup_windows_cuda.ps1"],
+      "problemMatcher": []
+    },
+    {
+      "label": "IDS: 1 - Verify environment",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": ["${workspaceFolder}\\scripts\\verify_environment.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "IDS: Check Autoencoder contract",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": ["${workspaceFolder}\\scripts\\02_train_autoencoder.py", "--check-only"],
+      "problemMatcher": []
+    },
+    {
+      "label": "IDS: Train Autoencoder (main)",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": ["${workspaceFolder}\\scripts\\02_train_autoencoder.py", "--run-id", "main"],
+      "problemMatcher": []
+    },
+    {
+      "label": "IDS: Train Stage1 XGBoost latent (main)",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}\\scripts\\03_train_stage1.py",
+        "--run-id", "main", "--model", "xgboost", "--representation", "latent"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "IDS: Train Stage1 MLP latent (main)",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}\\scripts\\03_train_stage1.py",
+        "--run-id", "main", "--model", "mlp", "--representation", "latent"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
+

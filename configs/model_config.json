@@ -1,0 +1,138 @@
+{
+  "experiment": {
+    "id": "main",
+    "random_state": 42,
+    "base_data_config": "configs/base.json",
+    "processed_dir": "data/processed",
+    "models_dir": "models",
+    "results_dir": "results",
+    "metadata_dir": "artifacts/metadata"
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "require_cuda": true,
+    "expected_gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "expected_vram_mib": 4096,
+    "expected_system_ram_gib": 16,
+    "logical_processors": 12,
+    "detected_driver": "610.62",
+    "driver_max_cuda": "13.3",
+    "pytorch_version": "2.13.0",
+    "pytorch_cuda_wheel": "cu130",
+    "mixed_precision": true,
+    "amp_dtype": "float16",
+    "allow_tf32": true,
+    "deterministic_algorithms": false,
+    "cudnn_benchmark": true,
+    "pin_memory": true,
+    "num_workers": 0
+  },
+  "autoencoder": {
+    "hidden_dims": [64, 32],
+    "latent_dim": 16,
+    "batch_size": 8192,
+    "epochs": 100,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "early_stopping_patience": 12,
+    "min_delta": 0.000001,
+    "gradient_clip_norm": 5.0,
+    "encode_batch_size": 16384
+  },
+  "stage1": {
+    "oof_folds": 5,
+    "calibrate_probabilities": true,
+    "xgboost": {
+      "n_estimators": 1500,
+      "learning_rate": 0.05,
+      "max_depth": 8,
+      "min_child_weight": 5,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "reg_alpha": 0.1,
+      "reg_lambda": 5.0,
+      "max_bin": 128,
+      "tree_method": "hist",
+      "device": "cuda:0",
+      "eval_metric": ["logloss", "aucpr"],
+      "early_stopping_rounds": 75
+    },
+    "mlp": {
+      "hidden_dims": [32, 16],
+      "dropout": 0.2,
+      "batch_size": 8192,
+      "epochs": 100,
+      "learning_rate": 0.001,
+      "weight_decay": 0.00001,
+      "early_stopping_patience": 12,
+      "reduce_lr_patience": 4,
+      "reduce_lr_factor": 0.5,
+      "gradient_clip_norm": 5.0
+    }
+  },
+  "stage2": {
+    "model": "xgboost",
+    "experiments": [
+      "latent_only",
+      "latent_plus_pattack_xgb",
+      "latent_plus_pattack_mlp"
+    ],
+    "xgboost": {
+      "n_estimators": 1500,
+      "learning_rate": 0.05,
+      "max_depth": 8,
+      "min_child_weight": 3,
+      "subsample": 0.8,
+      "colsample_bytree": 0.9,
+      "reg_alpha": 0.1,
+      "reg_lambda": 5.0,
+      "max_bin": 128,
+      "tree_method": "hist",
+      "device": "cuda:0",
+      "eval_metric": ["mlogloss", "merror"],
+      "early_stopping_rounds": 75
+    },
+    "mlp": {
+      "hidden_dims": [64, 32],
+      "dropout": 0.25,
+      "batch_size": 8192,
+      "epochs": 100,
+      "learning_rate": 0.001,
+      "weight_decay": 0.00001,
+      "early_stopping_patience": 12,
+      "reduce_lr_patience": 4,
+      "reduce_lr_factor": 0.5,
+      "gradient_clip_norm": 5.0
+    }
+  },
+  "novelty": {
+    "protocol": "leave_one_attack_class_out",
+    "minimum_held_out_samples": 500,
+    "known_rejection_rate": 0.05,
+    "max_probability": {
+      "enabled": true
+    },
+    "one_class_svm": {
+      "enabled": true,
+      "nu": 0.05,
+      "kernel": "rbf",
+      "gamma": "scale",
+      "max_training_samples": 20000
+    },
+    "isolation_forest": {
+      "enabled": true,
+      "n_estimators": 300,
+      "max_samples": 100000,
+      "contamination": "auto",
+      "n_jobs": -1
+    }
+  },
+  "evaluation": {
+    "decision_threshold": 0.5,
+    "save_predictions": true,
+    "save_probabilities": true,
+    "bootstrap_iterations": 1000,
+    "bootstrap_seed": 42
+  }
+}
+
