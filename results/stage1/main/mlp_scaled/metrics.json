@@ -1,0 +1,79 @@
+{
+  "run_id": "main",
+  "model": "mlp",
+  "representation": "scaled",
+  "feature_path": "D:\\CAO HOC\\IDS System\\data\\processed\\features_scaled.npy",
+  "feature_shape": [
+    2096804,
+    84
+  ],
+  "train_samples": 1467762,
+  "validation_samples": 314521,
+  "test_samples": 314521,
+  "oof_folds": 5,
+  "held_out_label_id": null,
+  "test_used_for_training_calibration_or_selection": false,
+  "p_attack_contract": "train=OOF; validation/test=final-model; rows aligned with Phase 2",
+  "probabilities_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\main\\stage1_mlp_scaled_p_attack_all.npy",
+  "oof_train_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9995251273707862,
+    "balanced_accuracy": 0.9994510094670401,
+    "precision": 0.9987589676387624,
+    "recall_detection_rate": 0.9993055304774895,
+    "f1": 0.9990321743030475,
+    "roc_auc": 0.9999485912067434,
+    "pr_auc": 0.9998517511173092,
+    "confusion_matrix": [
+      [
+        1107328,
+        447
+      ],
+      [
+        250,
+        359737
+      ]
+    ]
+  },
+  "validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9996661590164091,
+    "balanced_accuracy": 0.9995031910850667,
+    "precision": 0.9994553941908714,
+    "recall_detection_rate": 0.9991833136723662,
+    "f1": 0.9993193354120614,
+    "roc_auc": 0.9999454951024078,
+    "pr_auc": 0.9998418218974818,
+    "confusion_matrix": [
+      [
+        237338,
+        42
+      ],
+      [
+        63,
+        77078
+      ]
+    ]
+  },
+  "test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9996947739578598,
+    "balanced_accuracy": 0.9995702764429817,
+    "precision": 0.9994295567396575,
+    "recall_detection_rate": 0.9993259096978261,
+    "f1": 0.9993777305313922,
+    "roc_auc": 0.9999586513684935,
+    "pr_auc": 0.9998436042549513,
+    "confusion_matrix": [
+      [
+        237336,
+        44
+      ],
+      [
+        52,
+        77089
+      ]
+    ]
+  },
+  "status": "completed"
+}

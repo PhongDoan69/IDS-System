@@ -1,0 +1,79 @@
+{
+  "run_id": "main",
+  "model": "xgboost",
+  "representation": "latent",
+  "feature_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\main\\latent_features.npy",
+  "feature_shape": [
+    2096804,
+    16
+  ],
+  "train_samples": 1467762,
+  "validation_samples": 314521,
+  "test_samples": 314521,
+  "oof_folds": 5,
+  "held_out_label_id": null,
+  "test_used_for_training_calibration_or_selection": false,
+  "p_attack_contract": "train=OOF; validation/test=final-model; rows aligned with Phase 2",
+  "probabilities_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\main\\stage1_xgboost_latent_p_attack_all.npy",
+  "oof_train_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9996811472159656,
+    "balanced_accuracy": 0.9995515570549062,
+    "precision": 0.9994026931593086,
+    "recall_detection_rate": 0.9992971968432194,
+    "f1": 0.999349942217086,
+    "roc_auc": 0.999992476457195,
+    "pr_auc": 0.9999803485005182,
+    "confusion_matrix": [
+      [
+        1107560,
+        215
+      ],
+      [
+        253,
+        359734
+      ]
+    ]
+  },
+  "validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9996184674473246,
+    "balanced_accuracy": 0.9994847221042938,
+    "precision": 0.9992222034974916,
+    "recall_detection_rate": 0.9992222034974916,
+    "f1": 0.9992222034974916,
+    "roc_auc": 0.9999851114017427,
+    "pr_auc": 0.9999661976074613,
+    "confusion_matrix": [
+      [
+        237320,
+        60
+      ],
+      [
+        60,
+        77081
+      ]
+    ]
+  },
+  "test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.999675697330226,
+    "balanced_accuracy": 0.9995182606875161,
+    "precision": 0.9994683678894205,
+    "recall_detection_rate": 0.9992092402224498,
+    "f1": 0.9993387872580415,
+    "roc_auc": 0.9999951905965624,
+    "pr_auc": 0.9999860644261013,
+    "confusion_matrix": [
+      [
+        237339,
+        41
+      ],
+      [
+        61,
+        77080
+      ]
+    ]
+  },
+  "status": "completed"
+}

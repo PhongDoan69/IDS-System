@@ -1,0 +1,79 @@
+{
+  "run_id": "main",
+  "model": "xgboost",
+  "representation": "scaled",
+  "feature_path": "D:\\CAO HOC\\IDS System\\data\\processed\\features_scaled.npy",
+  "feature_shape": [
+    2096804,
+    84
+  ],
+  "train_samples": 1467762,
+  "validation_samples": 314521,
+  "test_samples": 314521,
+  "oof_folds": 5,
+  "held_out_label_id": null,
+  "test_used_for_training_calibration_or_selection": false,
+  "p_attack_contract": "train=OOF; validation/test=final-model; rows aligned with Phase 2",
+  "probabilities_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\main\\stage1_xgboost_scaled_p_attack_all.npy",
+  "oof_train_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.999910748472845,
+    "balanced_accuracy": 0.9998968060285905,
+    "precision": 0.9997666822211853,
+    "recall_detection_rate": 0.999869439729768,
+    "f1": 0.9998180583352199,
+    "roc_auc": 0.99999929123642,
+    "pr_auc": 0.99999783258223,
+    "confusion_matrix": [
+      [
+        1107691,
+        84
+      ],
+      [
+        47,
+        359940
+      ]
+    ]
+  },
+  "validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.999923693489465,
+    "balanced_accuracy": 0.9999188209714256,
+    "precision": 0.9997796528884914,
+    "recall_detection_rate": 0.9999092570747073,
+    "f1": 0.9998444507816349,
+    "roc_auc": 0.9999988042637531,
+    "pr_auc": 0.9999962552268732,
+    "confusion_matrix": [
+      [
+        237363,
+        17
+      ],
+      [
+        7,
+        77134
+      ]
+    ]
+  },
+  "test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9999300523653428,
+    "balanced_accuracy": 0.9999230336262407,
+    "precision": 0.9998055710378618,
+    "recall_detection_rate": 0.9999092570747073,
+    "f1": 0.9998574113682027,
+    "roc_auc": 0.9999999362703598,
+    "pr_auc": 0.9999998035815573,
+    "confusion_matrix": [
+      [
+        237365,
+        15
+      ],
+      [
+        7,
+        77134
+      ]
+    ]
+  },
+  "status": "completed"
+}

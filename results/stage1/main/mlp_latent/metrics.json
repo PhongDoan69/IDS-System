@@ -1,0 +1,79 @@
+{
+  "run_id": "main",
+  "model": "mlp",
+  "representation": "latent",
+  "feature_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\main\\latent_features.npy",
+  "feature_shape": [
+    2096804,
+    16
+  ],
+  "train_samples": 1467762,
+  "validation_samples": 314521,
+  "test_samples": 314521,
+  "oof_folds": 5,
+  "held_out_label_id": null,
+  "test_used_for_training_calibration_or_selection": false,
+  "p_attack_contract": "train=OOF; validation/test=final-model; rows aligned with Phase 2",
+  "probabilities_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\main\\stage1_mlp_latent_p_attack_all.npy",
+  "oof_train_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9985583493781689,
+    "balanced_accuracy": 0.9981317257386358,
+    "precision": 0.9968291430078716,
+    "recall_detection_rate": 0.9972943467402989,
+    "f1": 0.9970616906110183,
+    "roc_auc": 0.9998702993078483,
+    "pr_auc": 0.9996875748486779,
+    "confusion_matrix": [
+      [
+        1106633,
+        1142
+      ],
+      [
+        974,
+        359013
+      ]
+    ]
+  },
+  "validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.998610585620674,
+    "balanced_accuracy": 0.9981169666979668,
+    "precision": 0.997186859913402,
+    "recall_detection_rate": 0.9971480794908025,
+    "f1": 0.997167469325054,
+    "roc_auc": 0.9998924920836182,
+    "pr_auc": 0.9997033149707534,
+    "confusion_matrix": [
+      [
+        237163,
+        217
+      ],
+      [
+        220,
+        76921
+      ]
+    ]
+  },
+  "test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.998690071569148,
+    "balanced_accuracy": 0.9983008841865562,
+    "precision": 0.9971233462480401,
+    "recall_detection_rate": 0.9975369777420567,
+    "f1": 0.9973301191077932,
+    "roc_auc": 0.9999022242058346,
+    "pr_auc": 0.9997336814706637,
+    "confusion_matrix": [
+      [
+        237158,
+        222
+      ],
+      [
+        190,
+        76951
+      ]
+    ]
+  },
+  "status": "completed"
+}

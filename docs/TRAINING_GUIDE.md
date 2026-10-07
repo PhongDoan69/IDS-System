@@ -5,7 +5,7 @@ Tài liệu này dành cho việc chạy trong Visual Studio Code trên máy hi�
 - GPU: NVIDIA GeForce RTX 3050 Laptop GPU, VRAM 4 GB;
 - tài nguyên hệ thống quan sát được: khoảng 16 GB RAM, 12 logical processors;
 - driver NVIDIA: 610.62, báo mức tương thích CUDA tối đa 13.3;
-- môi trường đề xuất: Python 3.12, PyTorch 2.13.0 wheel `cu130`, XGBoost 3.4.2;
+- môi trường hỗ trợ: Python 3.10-3.12 (ưu tiên bản mới nhất đã cài), PyTorch 2.13.0 wheel `cu130`, XGBoost 3.4.2;
 - dữ liệu Phase 2: 2.096.804 dòng, 84 đặc trưng, split train/validation/test cố định.
 
 Không cài CUDA Toolkit chỉ để chạy pipeline. PyTorch wheel đã mang CUDA runtime. `nvcc`
@@ -13,12 +13,15 @@ chỉ cần khi tự biên dịch extension CUDA.
 
 ## 1. Cài môi trường trong VS Code
 
-Máy hiện chưa có Python distribution được đăng ký với `py launcher`. Cài Python 3.12
-64-bit trước, mở thư mục `D:\CAO HOC\IDS System` trong VS Code, rồi chạy:
+Script tự chọn Python 64-bit mới nhất trong các bản 3.12, 3.11 và 3.10 đã đăng ký với
+`py launcher`. Mở thư mục `D:\CAO HOC\IDS System` trong VS Code, rồi chạy:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\setup_windows_cuda.ps1
 ```
+
+Muốn buộc dùng một phiên bản cụ thể, truyền tham số, ví dụ
+`-PythonVersion 3.12`. Dùng `py -0p` để xem các phiên bản Python đã cài.
 
 Chọn interpreter `.venv\Scripts\python.exe`, sau đó xác minh:
 
@@ -159,4 +162,3 @@ bootstrap 95% cho accuracy và file dự đoán nén có `row_hash` để truy v
 - `artifacts/metadata/`: provenance, held-out label và hợp đồng chống leakage;
 - `artifacts/thresholds/`: ngưỡng chọn trên validation;
 - `results/`: metric, xác suất Stage 2, novelty score và dự đoán cuối.
-

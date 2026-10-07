@@ -1,5 +1,5 @@
 param(
-    [string]$PythonVersion = "3.12",
+    [string]$PythonVersion = "",
     [string]$TorchVersion = "2.13.0",
     [string]$TorchIndex = "https://download.pytorch.org/whl/cu130"
 )
@@ -8,28 +8,76 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $VenvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 
-# CUDA Toolkit/nvcc không bắt buộc. Wheel PyTorch cu130 mang theo CUDA runtime cần thiết.
-# Driver 610.62 của máy hỗ trợ CUDA tối đa 13.3 và tương thích ngược với runtime 13.0.
+# CUDA Toolkit/nvcc is optional. The PyTorch cu130 wheel includes the required CUDA runtime.
 if (-not (Get-Command py -ErrorAction SilentlyContinue)) {
-    throw "Không tìm thấy Python Launcher (py.exe). Hãy cài Python $PythonVersion 64-bit trước."
+    throw "Python Launcher (py.exe) was not found. Install 64-bit Python 3.10, 3.11, or 3.12 first."
 }
 
-& py "-$PythonVersion" --version
-if ($LASTEXITCODE -ne 0) {
-    throw "Python $PythonVersion chưa được cài hoặc chưa đăng ký với py launcher."
+if ($PythonVersion) {
+    $PythonCandidates = @($PythonVersion)
+} else {
+    $PythonCandidates = @("3.12", "3.11", "3.10")
 }
+
+$SelectedPythonVersion = $null
+$PreviousErrorActionPreference = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+foreach ($Candidate in $PythonCandidates) {
+    & py "-$Candidate" -c "import sys; raise SystemExit(0 if sys.maxsize > 2**32 else 1)" *> $null
+    if ($LASTEXITCODE -eq 0) {
+        $SelectedPythonVersion = $Candidate
+        break
+    }
+}
+$ErrorActionPreference = $PreviousErrorActionPreference
+
+if (-not $SelectedPythonVersion) {
+    if ($PythonVersion) {
+        throw "64-bit Python $PythonVersion is not installed or is not registered with py.exe. Run 'py -0p' to list installed versions."
+    }
+    throw "No supported 64-bit Python was found. Install Python 3.10, 3.11, or 3.12, then run this script again."
+}
+
+Write-Host "Using Python $SelectedPythonVersion"
 
 if (-not (Test-Path -LiteralPath $VenvPython)) {
-    & py "-$PythonVersion" -m venv (Join-Path $ProjectRoot ".venv")
+    & py "-$SelectedPythonVersion" -m venv (Join-Path $ProjectRoot ".venv")
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to create .venv with Python $SelectedPythonVersion."
+    }
 }
 
-& $VenvPython -m pip install --upgrade pip setuptools wheel
-& $VenvPython -m pip install -r (Join-Path $ProjectRoot "requirements.txt")
+function Invoke-CheckedVenvPython {
+    param(
+        [string]$Step,
+        [string[]]$CommandArgs
+    )
 
-# Dùng index chính thức của PyTorch để chắc chắn lấy wheel CUDA 13.0 cho Windows.
-& $VenvPython -m pip install "torch==$TorchVersion" --index-url $TorchIndex
+    & $VenvPython @CommandArgs
+    if ($LASTEXITCODE -ne 0) {
+        throw "$Step failed with exit code $LASTEXITCODE. Review the pip/Python error above."
+    }
+}
 
-& $VenvPython (Join-Path $PSScriptRoot "verify_environment.py") --config (Join-Path $ProjectRoot "configs\model_config.json")
+Invoke-CheckedVenvPython "Virtual environment check" @(
+    "-c", "import sys; print('Virtual environment:', sys.executable)"
+)
+Invoke-CheckedVenvPython "pip/setuptools/wheel upgrade" @(
+    "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
+)
+Invoke-CheckedVenvPython "Project dependency installation" @(
+    "-m", "pip", "install", "-r", (Join-Path $ProjectRoot "requirements.txt")
+)
 
-Write-Host "Hoàn tất môi trường. Trong VS Code chọn interpreter: $VenvPython"
+# Use the official PyTorch index to select the CUDA 13.0 wheel for Windows.
+Invoke-CheckedVenvPython "PyTorch CUDA installation" @(
+    "-m", "pip", "install", "torch==$TorchVersion", "--index-url", $TorchIndex
+)
 
+Invoke-CheckedVenvPython "Environment verification" @(
+    (Join-Path $PSScriptRoot "verify_environment.py"),
+    "--config",
+    (Join-Path $ProjectRoot "configs\model_config.json")
+)
+
+Write-Host "Environment setup complete. Select this VS Code interpreter: $VenvPython"

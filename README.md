@@ -17,7 +17,7 @@ Code. Mã không tự huấn luyện khi import và mọi script đều có ch�
 
 ## Bắt đầu
 
-Máy cần Python 3.12 64-bit. Từ terminal VS Code:
+Máy cần Python 3.10-3.12 64-bit. Script sẽ tự ưu tiên phiên bản mới nhất đã cài. Từ terminal VS Code:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\setup_windows_cuda.ps1
