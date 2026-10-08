@@ -1,0 +1,39 @@
+{
+  "run_id": "eval_main_latent_only",
+  "test_samples": 314521,
+  "stage1_threshold": 0.5,
+  "held_out_label_id": null,
+  "novelty_method": null,
+  "novelty_threshold": null,
+  "test_is_evaluation_only": true,
+  "stage1_test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.999675697330226,
+    "balanced_accuracy": 0.9995182606875161,
+    "precision": 0.9994683678894205,
+    "recall_detection_rate": 0.9992092402224498,
+    "f1": 0.9993387872580415,
+    "roc_auc": 0.9999951905965624,
+    "pr_auc": 0.9999860644261013,
+    "confusion_matrix": [
+      [
+        237339,
+        41
+      ],
+      [
+        61,
+        77080
+      ]
+    ]
+  },
+  "end_to_end_metrics": {
+    "accuracy": 0.9952976112882764,
+    "balanced_accuracy": 0.8301338395679301,
+    "macro_f1": 0.8407583429877007,
+    "weighted_f1": 0.9953084610635335
+  },
+  "accuracy_bootstrap_95ci": [
+    0.9950623512268066,
+    0.9955201745033264
+  ]
+}
