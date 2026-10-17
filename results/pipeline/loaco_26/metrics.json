@@ -1,0 +1,47 @@
+{
+  "run_id": "loaco_26",
+  "test_samples": 314521,
+  "stage1_threshold": 0.5,
+  "held_out_label_id": 26,
+  "novelty_method": "max_probability",
+  "novelty_threshold": 0.1730237603187561,
+  "test_is_evaluation_only": true,
+  "stage1_test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.998283103512961,
+    "balanced_accuracy": 0.9968368146174418,
+    "precision": 0.9989968080255358,
+    "recall_detection_rate": 0.9939980036556436,
+    "f1": 0.9964911368716536,
+    "roc_auc": 0.9999861312125092,
+    "pr_auc": 0.9999588968088331,
+    "confusion_matrix": [
+      [
+        237303,
+        77
+      ],
+      [
+        463,
+        76678
+      ]
+    ]
+  },
+  "end_to_end_metrics": {
+    "accuracy": 0.954330553444762,
+    "balanced_accuracy": 0.8127678804461472,
+    "macro_f1": 0.7935889032475983,
+    "weighted_f1": 0.955034466273454
+  },
+  "accuracy_bootstrap_95ci": [
+    0.9535864979028702,
+    0.9550460174679756
+  ],
+  "open_set_metrics": {
+    "threshold": 0.1730237603187561,
+    "unknown_recall": 0.26065022421524664,
+    "unknown_f1": 0.3526902109504622,
+    "known_false_rejection_rate": 0.04935659864161988,
+    "open_set_roc_auc": 0.785391982395132,
+    "open_set_pr_auc": 0.4664472073190031
+  }
+}
