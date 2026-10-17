@@ -1,0 +1,48 @@
+{
+  "run_id": "loaco_26",
+  "protocol": "leave_one_attack_class_out",
+  "held_out_label_id": 26,
+  "held_out_test_samples": 14272,
+  "known_train_attack_samples": 293387,
+  "known_validation_attack_samples": 62869,
+  "all_test_samples": 314521,
+  "methods": [
+    "max_probability",
+    "one_class_svm",
+    "isolation_forest"
+  ],
+  "verified_upstream_metadata": [
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\autoencoder\\loaco_26\\run.json",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\stage1\\loaco_26\\xgboost_latent.json",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\stage2\\loaco_26\\latent_only.json"
+  ],
+  "threshold_source": "known validation attacks only",
+  "test_used_for_fit_or_threshold": false,
+  "metrics": {
+    "max_probability": {
+      "threshold": 0.1730237603187561,
+      "unknown_recall": 0.26065022421524664,
+      "unknown_f1": 0.3526902109504622,
+      "known_false_rejection_rate": 0.04935659864161988,
+      "open_set_roc_auc": 0.785391982395132,
+      "open_set_pr_auc": 0.4664472073190031
+    },
+    "one_class_svm": {
+      "threshold": -7.32747543358446,
+      "unknown_recall": 0.11869394618834081,
+      "unknown_f1": 0.1776892012377406,
+      "known_false_rejection_rate": 0.04932478646073581,
+      "open_set_roc_auc": 0.5482142957129092,
+      "open_set_pr_auc": 0.2216391574564836
+    },
+    "isolation_forest": {
+      "threshold": 0.3725672209746997,
+      "unknown_recall": 0.030198991031390135,
+      "unknown_f1": 0.04828320170279505,
+      "known_false_rejection_rate": 0.0501041848923953,
+      "open_set_roc_auc": 0.8507158968873778,
+      "open_set_pr_auc": 0.39617482704612356
+    }
+  },
+  "status": "completed"
+}

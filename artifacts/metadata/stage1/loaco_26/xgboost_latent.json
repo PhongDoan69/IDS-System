@@ -1,0 +1,79 @@
+{
+  "run_id": "loaco_26",
+  "model": "xgboost",
+  "representation": "latent",
+  "feature_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\loaco_26\\latent_features.npy",
+  "feature_shape": [
+    2096804,
+    16
+  ],
+  "train_samples": 1401162,
+  "validation_samples": 300249,
+  "test_samples": 314521,
+  "oof_folds": 5,
+  "held_out_label_id": 26,
+  "test_used_for_training_calibration_or_selection": false,
+  "p_attack_contract": "train=OOF; validation/test=final-model; rows aligned with Phase 2",
+  "probabilities_path": "D:\\CAO HOC\\IDS System\\data\\processed\\experiments\\loaco_26\\stage1_xgboost_latent_p_attack_all.npy",
+  "oof_train_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9994961324957429,
+    "balanced_accuracy": 0.9992503530416885,
+    "precision": 0.9987662105281097,
+    "recall_detection_rate": 0.9988274872438111,
+    "f1": 0.9987968479461206,
+    "roc_auc": 0.9999907522468802,
+    "pr_auc": 0.9999707867723211,
+    "confusion_matrix": [
+      [
+        1107413,
+        362
+      ],
+      [
+        344,
+        293043
+      ]
+    ]
+  },
+  "validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9994304727076526,
+    "balanced_accuracy": 0.9990960732566581,
+    "precision": 0.9987590288605339,
+    "recall_detection_rate": 0.9985207335888912,
+    "f1": 0.9986398670092187,
+    "roc_auc": 0.9999800297084601,
+    "pr_auc": 0.9999468215596817,
+    "confusion_matrix": [
+      [
+        237302,
+        78
+      ],
+      [
+        93,
+        62776
+      ]
+    ]
+  },
+  "test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.998283103512961,
+    "balanced_accuracy": 0.9968368146174418,
+    "precision": 0.9989968080255358,
+    "recall_detection_rate": 0.9939980036556436,
+    "f1": 0.9964911368716536,
+    "roc_auc": 0.9999861312125092,
+    "pr_auc": 0.9999588968088331,
+    "confusion_matrix": [
+      [
+        237303,
+        77
+      ],
+      [
+        463,
+        76678
+      ]
+    ]
+  },
+  "status": "completed"
+}
