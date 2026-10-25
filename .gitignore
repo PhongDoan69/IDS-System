@@ -23,3 +23,5 @@ artifacts/thresholds/*
 # Giữ JSON/CSV metric nhỏ; bỏ xác suất, novelty score và prediction cỡ lớn.
 results/**/*.npy
 results/**/*.csv.gz
+
+/data/external/
