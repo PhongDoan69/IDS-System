@@ -1,0 +1,161 @@
+--- references (2).bib
++++ references_reviewed.bib
+@@ -5,8 +5,7 @@
+   volume  = {2},
+   pages   = {20},
+   year    = {2019},
+-  doi     = {10.1186/s42400-019-0038-7},
+-  note    = {doi: 10.1186/s42400-019-0038-7}
++  doi     = {10.1186/s42400-019-0038-7}
+ }
+ 
+ @article{buczak2016survey,
+@@ -17,8 +16,7 @@
+   number  = {2},
+   pages   = {1153--1176},
+   year    = {2016},
+-  doi     = {10.1109/COMST.2015.2494502},
+-  note    = {doi: 10.1109/COMST.2015.2494502}
++  doi     = {10.1109/COMST.2015.2494502}
+ }
+ 
+ @inproceedings{sharafaldin2018cicids,
+@@ -27,8 +25,7 @@
+   booktitle = {Proceedings of the 4th International Conference on Information Systems Security and Privacy},
+   pages     = {108--116},
+   year      = {2018},
+-  doi       = {10.5220/0006639801080116},
+-  note      = {doi: 10.5220/0006639801080116}
++  doi       = {10.5220/0006639801080116}
+ }
+ 
+ @inproceedings{engelen2021cicids,
+@@ -37,8 +34,7 @@
+   booktitle = {2021 IEEE Security and Privacy Workshops},
+   pages     = {7--12},
+   year      = {2021},
+-  doi       = {10.1109/SPW53761.2021.00009},
+-  note      = {doi: 10.1109/SPW53761.2021.00009}
++  doi       = {10.1109/SPW53761.2021.00009}
+ }
+ 
+ @article{chen2024hybrid,
+@@ -48,8 +44,7 @@
+   volume  = {250},
+   pages   = {110576},
+   year    = {2024},
+-  doi     = {10.1016/j.comnet.2024.110576},
+-  note    = {doi: 10.1016/j.comnet.2024.110576}
++  doi     = {10.1016/j.comnet.2024.110576}
+ }
+ 
+ @article{hussein2026hybrid,
+@@ -60,8 +55,7 @@
+   number  = {2},
+   pages   = {39},
+   year    = {2026},
+-  doi     = {10.3390/ai7020039},
+-  note    = {doi: 10.3390/ai7020039}
++  doi     = {10.3390/ai7020039}
+ }
+ 
+ @inproceedings{bendale2016open,
+@@ -70,8 +64,7 @@
+   booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+   pages     = {1563--1572},
+   year      = {2016},
+-  doi       = {10.1109/CVPR.2016.173},
+-  note      = {doi: 10.1109/CVPR.2016.173}
++  doi       = {10.1109/CVPR.2016.173}
+ }
+ 
+ @article{khraisat2020stacking,
+@@ -82,8 +75,7 @@
+   number  = {1},
+   pages   = {173},
+   year    = {2020},
+-  doi     = {10.3390/electronics9010173},
+-  note    = {doi: 10.3390/electronics9010173}
++  doi     = {10.3390/electronics9010173}
+ }
+ 
+ @article{wolpert1992stacked,
+@@ -94,8 +86,7 @@
+   number  = {2},
+   pages   = {241--259},
+   year    = {1992},
+-  doi     = {10.1016/S0893-6080(05)80023-1},
+-  note    = {doi: 10.1016/S0893-6080(05)80023-1}
++  doi     = {10.1016/S0893-6080(05)80023-1}
+ }
+ 
+ @incollection{platt2000probabilities,
+@@ -140,8 +131,7 @@
+   number  = {3},
+   pages   = {e0118432},
+   year    = {2015},
+-  doi     = {10.1371/journal.pone.0118432},
+-  note    = {doi: 10.1371/journal.pone.0118432}
++  doi     = {10.1371/journal.pone.0118432}
+ }
+ 
+ @inproceedings{guo2017calibration,
+@@ -161,8 +151,7 @@
+   number  = {7},
+   pages   = {1443--1471},
+   year    = {2001},
+-  doi     = {10.1162/089976601750264965},
+-  note    = {doi: 10.1162/089976601750264965}
++  doi     = {10.1162/089976601750264965}
+ }
+ 
+ @inproceedings{liu2008isolation,
+@@ -171,8 +160,7 @@
+   booktitle = {2008 Eighth IEEE International Conference on Data Mining},
+   pages     = {413--422},
+   year      = {2008},
+-  doi       = {10.1109/ICDM.2008.17},
+-  note      = {doi: 10.1109/ICDM.2008.17}
++  doi       = {10.1109/ICDM.2008.17}
+ }
+ @article{goldschmidt2025datasets,
+   author  = {Goldschmidt, Patrik and Chud{\'a}, Daniela},
+@@ -181,8 +169,7 @@
+   volume  = {156},
+   pages   = {104510},
+   year    = {2025},
+-  doi     = {10.1016/j.cose.2025.104510},
+-  note    = {doi: 10.1016/j.cose.2025.104510}
++  doi     = {10.1016/j.cose.2025.104510}
+ }
+ 
+ @article{ashraf2026idsdatasets,
+@@ -192,8 +179,7 @@
+   volume  = {29},
+   pages   = {577},
+   year    = {2026},
+-  doi     = {10.1007/s10791-026-10486-2},
+-  note    = {doi: 10.1007/s10791-026-10486-2}
++  doi     = {10.1007/s10791-026-10486-2}
+ }
+ 
+ @article{kaufman2012leakage,
+@@ -204,8 +190,7 @@
+   number  = {4},
+   pages   = {15:1--15:21},
+   year    = {2012},
+-  doi     = {10.1145/2382577.2382579},
+-  note    = {doi: 10.1145/2382577.2382579}
++  doi     = {10.1145/2382577.2382579}
+ }
+ 
+ @article{hinton2006dimensionality,
+@@ -257,7 +242,7 @@
+                Out-of-Distribution Examples in Neural Networks},
+   booktitle = {International Conference on Learning Representations},
+   year      = {2017},
+-  url       = {https://openreview.net/references/pdf?id=HJ2Pfowdg}
++  url       = {https://arxiv.org/abs/1610.02136}
+ }
+ 
+ @article{geng2021openrecognitionsurvey,

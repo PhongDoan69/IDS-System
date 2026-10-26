@@ -1,5 +1,12 @@
 # Hướng dẫn huấn luyện pipeline IDS
 
+> HƯỚNG DẪN LỊCH SỬ — Cập nhật chỉ dẫn ngày 26/10/2026:
+> source mới yêu cầu `--protocol revised_v1`, preprocessing per-run và lineage mới.
+> Dùng [PIPELINE_REPRODUCTION_GUIDE.md](research_alignment/PIPELINE_REPRODUCTION_GUIDE.md)
+> cho training mới. Các checklist/ngày/lệnh bên dưới là lịch sử, không phản ánh trạng thái hiện tại.
+> Đã có legacy end-to-end/LOACO nhưng còn lỗi validity theo audit; không ghi đè `main`/`loaco_26`.
+> XGBoost pin/runtime hiện tại được kiểm là **3.2.0**, không phải 3.4.2 được ghi trong phần cũ.
+
 Tài liệu này dành cho việc chạy trong Visual Studio Code trên máy hiện tại:
 
 - GPU: NVIDIA GeForce RTX 3050 Laptop GPU, VRAM 4 GB;

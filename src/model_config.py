@@ -29,6 +29,12 @@ def validate_model_config(config: dict[str, Any]) -> None:
         raise ValueError("autoencoder.latent_dim phải lớn hơn 0")
     if int(config["stage1"]["oof_folds"]) < 2:
         raise ValueError("stage1.oof_folds phải từ 2 trở lên để tránh stacking leakage")
+    if not 0 <= float(config['evaluation']['decision_threshold']) <= 1:
+        raise ValueError('Gate threshold phải thuộc [0,1]')
+    if not 0 < float(config['novelty']['known_rejection_rate']) < 1:
+        raise ValueError('Known rejection rate phải thuộc (0,1)')
+    if int(config['evaluation']['bootstrap_iterations']) < 1:
+        raise ValueError('bootstrap_iterations phải dương')
 
 
 def project_root(config: dict[str, Any]) -> Path:
@@ -45,6 +51,8 @@ def experiment_id(config: dict[str, Any], override: str | None = None) -> str:
     cleaned = "".join(character if character.isalnum() or character in "-_" else "_" for character in value)
     if not cleaned:
         raise ValueError("experiment id không hợp lệ")
+    if cleaned != value or cleaned.upper() in {'CON', 'PRN', 'AUX', 'NUL', *{f'COM{i}' for i in range(1, 10)}, *{f'LPT{i}' for i in range(1, 10)}}:
+        raise ValueError('run-id cần tên tường minh chỉ gồm chữ/số/-/_ và không là Windows device name')
     return cleaned
 
 

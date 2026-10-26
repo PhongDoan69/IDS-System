@@ -78,6 +78,27 @@ def build_multiclass_mlp(input_dim: int, num_classes: int, config: dict[str, Any
     return nn.Sequential(*layers)
 
 
+def weighted_validation_loss(model, features, targets, indices, batch_size, device, hardware, criterion):
+    """Weighted CE toàn population: tổng numerator / tổng weight target, không theo batch count."""
+    import torch
+    enabled = bool(hardware.get('mixed_precision', True)) and device.type == 'cuda'
+    dtype = torch.float16 if hardware.get('amp_dtype') == 'float16' else torch.bfloat16
+    model.eval()
+    numerator, denominator = 0.0, 0.0
+    with torch.inference_mode():
+        for selected in iter_index_batches(indices, batch_size, shuffle=False, random_state=0):
+            batch = torch_batch(features, selected, device, hardware.get('pin_memory', True))
+            target = torch.as_tensor(np.asarray(targets[selected]), dtype=torch.long, device=device)
+            with torch.autocast(device_type=device.type, dtype=dtype, enabled=enabled):
+                loss = criterion(model(batch), target)
+            weight = float(criterion.weight[target].sum().item())
+            numerator += float(loss.item()) * weight
+            denominator += weight
+    if denominator <= 0:
+        raise ValueError('Weighted validation population rỗng hoặc không có weight dương')
+    return numerator / denominator
+
+
 def train_stage2_mlp(
     features: np.ndarray,
     targets: np.ndarray,
@@ -116,20 +137,12 @@ def train_stage2_mlp(
     batch_size = int(config["batch_size"])
 
     def loss_on(indices: np.ndarray) -> float:
-        model.eval()
-        total = 0.0
-        with torch.inference_mode():
-            for selected in iter_index_batches(indices, batch_size, shuffle=False, random_state=0):
-                batch = torch_batch(features, selected, device, hardware.get("pin_memory", True))
-                target = torch.as_tensor(np.asarray(targets[selected]), dtype=torch.long, device=device)
-                with torch.autocast(device_type=device.type, dtype=dtype, enabled=enabled):
-                    loss = criterion(model(batch), target)
-                total += float(loss.item()) * len(selected)
-        return total / max(len(indices), 1)
+        return weighted_validation_loss(model, features, targets, indices, batch_size, device, hardware, criterion)
 
     for epoch in range(1, int(config["epochs"]) + 1):
         model.train()
         total = 0.0
+        denominator = 0.0
         for selected in iter_index_batches(
             train_indices, batch_size, shuffle=True, random_state=random_state + epoch
         ):
@@ -143,9 +156,11 @@ def train_stage2_mlp(
             torch.nn.utils.clip_grad_norm_(model.parameters(), float(config["gradient_clip_norm"]))
             scaler.step(optimizer)
             scaler.update()
-            total += float(loss.item()) * len(selected)
+            batch_weight = float(criterion.weight[target].sum().item())
+            total += float(loss.item()) * batch_weight
+            denominator += batch_weight
 
-        train_loss = total / max(len(train_indices), 1)
+        train_loss = total / max(denominator, 1e-12)
         validation_loss = loss_on(validation_indices)
         scheduler.step(validation_loss)
         history.append(epoch, train_loss, validation_loss, optimizer.param_groups[0]["lr"])

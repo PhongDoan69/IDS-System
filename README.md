@@ -1,11 +1,17 @@
 # IDS System - CICIDS2017 Research Pipeline
 
+> Cập nhật 26/10/2026: code training đã chuyển sang corrective protocol `revised_v1`.
+> Dùng [hướng dẫn tái lập mới](docs/research_alignment/PIPELINE_REPRODUCTION_GUIDE.md)
+> và [báo cáo căn chỉnh](docs/research_alignment/02_methodology_alignment_summary.md).
+> Cần scaler/lineage và run-id mới; không chạy lại các lệnh legacy bên dưới để ghi đè `main`.
+> Model/results cũ được giữ như exploratory; split overlap và target provenance chưa được giải quyết.
+
 Pipeline thực nghiệm cho luận văn thạc sĩ về hệ thống phát hiện xâm nhập kết hợp mô
-hình máy học. Phase 2 đã hoàn tất làm sạch, bảo toàn 27 nhãn, loại rò rỉ đặc trưng,
+hình máy học. Phase 2 đã hoàn tất làm sạch, bảo toàn 27 nhãn, loại các cột annotation/IP/time,
 chia train/validation/test cố định và scale chỉ trên train.
 
 Phần mã Phase 3-6 hiện đã sẵn sàng để người dùng chủ động chạy trong Visual Studio
-Code. Mã không tự huấn luyện khi import và mọi script đều có chế độ `--check-only`.
+Code. Mã không tự huấn luyện khi import; scripts training/evaluation có `--check-only`.
 
 ## Cấu trúc mô hình
 

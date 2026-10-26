@@ -1,0 +1,7 @@
+{
+  "approved": false,
+  "units_and_extractor_evidence": "",
+  "canonical_to_native": {},
+  "target_policy": "REQUIRES RESEARCHER APPROVAL: binary transfer or explicit open-set ontology; never reuse CICIDS2017 IDs blindly",
+  "note": "Native adapters exist. Empty mapping intentionally blocks zero-shot inference; no missing feature may be silently zero-filled."
+}

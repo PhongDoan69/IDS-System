@@ -16,6 +16,7 @@ from src.data_loader import inspect_schema, iter_csv_chunks, stable_row_hash
 from src.preprocessing import TrainOnlyStandardScaler, clean_chunk, feature_columns, save_scaler
 from src.split_data import TRAIN_ID, constrained_stratified_split, split_summary
 from src.utils import ensure_directories, set_global_seed, write_json
+from src.contracts import assert_new_outputs
 
 
 def parse_args() -> argparse.Namespace:
@@ -33,7 +34,7 @@ def collect_unique_metadata(config: dict, schema: list[str], limit: int | None):
     binary_parts: list[np.ndarray] = []
     attempted_parts: list[np.ndarray] = []
     source_parts: list[np.ndarray] = []
-    label_to_id: dict[str, int] = {}
+    label_to_id: dict[str, int] = {'BENIGN': 0}
     source_to_id = {name: index for index, name in enumerate(config["data"]["files"])}
     counters = Counter()
 
@@ -54,6 +55,8 @@ def collect_unique_metadata(config: dict, schema: list[str], limit: int | None):
             continue
 
         labels = cleaned.loc[keep, "attack_label_normalized"]
+        if any(label.casefold() == 'benign' and label != 'BENIGN' for label in labels.unique()):
+            raise ValueError('Nhãn benign không đúng spelling BENIGN của protocol CICIDS2017; không đổi label ngầm')
         for label in labels.unique():
             if label not in label_to_id:
                 label_to_id[label] = len(label_to_id)
@@ -92,6 +95,16 @@ def main() -> None:
         preprocessor_dir = output_path(config, "preprocessors_dir")
         metadata_dir = output_path(config, "metadata_dir")
         results_dir = output_path(config, "results_dir")
+    # Kiểm mọi output, kể cả metadata của lần chạy dở dang, trước khi ghi bất kỳ file nào.
+    array_outputs = ['features_raw.npy', 'features_scaled.npy', 'row_hashes.npy',
+                     'attack_label_ids.npy', 'binary_labels.npy', 'attempted_flags.npy',
+                     'source_ids.npy', 'split_ids.npy', 'train_indices.npy',
+                     'validation_indices.npy', 'test_indices.npy', 'split_summary.csv']
+    metadata_outputs = ['feature_names.json', 'label_mapping.json', 'source_mapping.json',
+                        'cleaning_report.json', 'split_config.json']
+    assert_new_outputs(*(processed_dir / name for name in array_outputs),
+                       *(metadata_dir / name for name in metadata_outputs),
+                       preprocessor_dir / 'scaler.joblib', results_dir / 'split_summary.csv')
     ensure_directories([processed_dir, preprocessor_dir, metadata_dir, results_dir])
 
     (

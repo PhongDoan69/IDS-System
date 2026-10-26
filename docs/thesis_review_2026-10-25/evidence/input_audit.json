@@ -1,0 +1,155 @@
+{
+  "review_date": "2026-10-25",
+  "local_repo_head_at_review": "8e96ddd0aeff5605496eb884a2a81ab8d9ee64d4",
+  "historical_audit_commit_cited_in_thesis": "895cc8bbba59497ceda625cf9947fa1828e20724",
+  "inputs": [
+    {
+      "path": "C:\\Users\\Admin\\Downloads\\main (3).pdf",
+      "sha256": "49fa2b10bcb3ac7cd861288dc5127718f5e614d2d4925b3db17934fe876fb1b4"
+    },
+    {
+      "path": "C:\\Users\\Admin\\Downloads\\references (2).bib",
+      "sha256": "57594e42d5a016c7b8979b0aa7db94ff5a61d382b4e4fbfb4550b25762753102"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\split_summary.csv",
+      "sha256": "9b48bf9c9087080608dfed831702c5b55dac1b2a613c103a0306c0ac7d40d110"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\dataset_summary.csv",
+      "sha256": "a3e2fabab13be368c3a16b3defe8ceadc5033b5d24fa08d31ddf46c485f9a978"
+    }
+  ],
+  "upstream": [
+    {
+      "path": "composer/references/section_guides.md",
+      "url": "https://github.com/lishix520/academic-paper-skills/blob/main/composer/references/section_guides.md",
+      "sha256_local_utf8": "8dacb0926a368fb2370b6e6b2f515d35e382fe9b8ce7bc0b20138d3d3b525852"
+    },
+    {
+      "path": "composer/references/writing_standards.md",
+      "url": "https://github.com/lishix520/academic-paper-skills/blob/main/composer/references/writing_standards.md",
+      "sha256_local_utf8": "a446037d2863559b9eef5d517352ee7ebaffbe82d37ef9b745b34d44305ed00e"
+    },
+    {
+      "path": "composer/SKILL.md",
+      "url": "https://github.com/lishix520/academic-paper-skills/blob/main/composer/SKILL.md",
+      "sha256_local_utf8": "9cd2b41aa8bffae46f17f3451036fff6f3b99559f9dfd8aa5798d7e0787e9523"
+    },
+    {
+      "path": "LICENSE",
+      "url": "https://github.com/lishix520/academic-paper-skills/blob/main/LICENSE",
+      "sha256_local_utf8": "5607eb3ddad20aed055df92cb65e534dd7a652bf92dfa578ea23d40f79c78442"
+    },
+    {
+      "path": "strategist/references/quality_standards.md",
+      "url": "https://github.com/lishix520/academic-paper-skills/blob/main/strategist/references/quality_standards.md",
+      "sha256_local_utf8": "9a37e758288f6331dbf682b2901cd08c8bd71bb8590c15c0b298eb428902ae03"
+    },
+    {
+      "path": "strategist/SKILL.md",
+      "url": "https://github.com/lishix520/academic-paper-skills/blob/main/strategist/SKILL.md",
+      "sha256_local_utf8": "a68c003ffdd64ee076d8918b97262c5654bf8ca995ba1c85de26ce42dfa20101"
+    }
+  ],
+  "upstream_root_SKILL_exists": false,
+  "upstream_ref": "main fetched on review date; no immutable commit ID asserted",
+  "pdf_pages": 107,
+  "bib_entries": 29,
+  "entry_types": {
+    "article": 20,
+    "inproceedings": 8,
+    "incollection": 1
+  },
+  "duplicate_keys": [],
+  "duplicate_dois": [],
+  "years": {
+    "1986": 1,
+    "1992": 1,
+    "2000": 1,
+    "2001": 1,
+    "2006": 1,
+    "2008": 1,
+    "2012": 1,
+    "2015": 1,
+    "2016": 3,
+    "2017": 2,
+    "2018": 1,
+    "2019": 1,
+    "2020": 1,
+    "2021": 2,
+    "2023": 3,
+    "2024": 2,
+    "2025": 4,
+    "2026": 2
+  },
+  "doi_count": 27,
+  "redundant_doi_notes_removed": [
+    "khraisat2019survey",
+    "buczak2016survey",
+    "sharafaldin2018cicids",
+    "engelen2021cicids",
+    "chen2024hybrid",
+    "hussein2026hybrid",
+    "bendale2016open",
+    "khraisat2020stacking",
+    "wolpert1992stacked",
+    "saito2015precisionrecall",
+    "scholkopf2001support",
+    "liu2008isolation",
+    "goldschmidt2025datasets",
+    "ashraf2026idsdatasets",
+    "kaufman2012leakage"
+  ],
+  "extracted_body_reference_numbers_in_range": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "other_bracket_number_tokens_not_asserted_as_citations": [
+    0,
+    32,
+    64
+  ],
+  "numeric_reference_range": [
+    1,
+    29
+  ],
+  "citation_check_limit": "PDF-number coverage only; source LaTeX citation keys and semantic support not proven.",
+  "split_totals": {
+    "train": 1467762,
+    "validation": 314521,
+    "test": 314521
+  },
+  "class_count": 27,
+  "benign_total": 1582535,
+  "benign_percent": 75.47367326655234,
+  "source_PDF_unchanged": true,
+  "training_executed": false
+}

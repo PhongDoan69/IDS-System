@@ -66,6 +66,7 @@ def train_autoencoder(
     hardware: dict[str, Any],
     device,
     checkpoint_path: Path,
+    random_state: int = 42,
 ):
     """Fit chỉ trên train; validation chỉ dùng early stopping; test tuyệt đối không tham gia."""
     import torch
@@ -92,7 +93,7 @@ def train_autoencoder(
             train_indices,
             batch_size,
             shuffle=True,
-            random_state=epoch,
+            random_state=random_state + epoch,
         ):
             batch = torch_batch(features, batch_indices, device, hardware.get("pin_memory", True))
             optimizer.zero_grad(set_to_none=True)
@@ -159,6 +160,9 @@ def encode_to_memmap(
             batch = torch_batch(features, indices, device, hardware.get("pin_memory", True))
             with torch.autocast(device_type=device.type, dtype=amp_dtype, enabled=amp_enabled):
                 latent = model.encode(batch)
-            destination[indices] = latent.float().cpu().numpy()
+            values = latent.float().cpu().numpy()
+            if not np.isfinite(values).all():
+                raise ValueError('Encoder sinh NaN/Inf; không công nhận latent artifact completed')
+            destination[indices] = values
     destination.flush()
 

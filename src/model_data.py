@@ -17,6 +17,12 @@ class PreparedArrays:
     split_ids: np.ndarray
     row_hashes: np.ndarray
 
+    def close(self):
+        """Windows giữ khóa file khi memmap còn sống; đóng rõ ràng khi hết dùng."""
+        for value in self.__dict__.values():
+            if isinstance(value, np.memmap) and not value._mmap.closed:
+                value._mmap.close()
+
 
 def load_prepared_arrays(processed_dir: Path, representation_path: Path | None = None) -> PreparedArrays:
     feature_path = representation_path or processed_dir / "features_scaled.npy"
@@ -40,6 +46,19 @@ def load_prepared_arrays(processed_dir: Path, representation_path: Path | None =
     lengths = {len(array) for array in arrays.__dict__.values()}
     if len(lengths) != 1:
         raise ValueError("Các array Phase 2 không cùng số sample")
+    if arrays.features.ndim != 2 or not arrays.features.shape[0] or not arrays.features.shape[1]:
+        raise ValueError('Features phải là ma trận không rỗng')
+    for name in ['binary_labels', 'attack_label_ids', 'split_ids', 'row_hashes']:
+        value = getattr(arrays, name)
+        if value.ndim != 1 or not np.issubdtype(value.dtype, np.integer):
+            raise ValueError(f'{name} phải là vector integer')
+    if not np.isin(arrays.split_ids, [0, 1, 2]).all() or np.any(arrays.attack_label_ids < 0):
+        raise ValueError('Split/label ID không hợp lệ')
+    if not np.array_equal(arrays.binary_labels, np.asarray(arrays.attack_label_ids) != 0):
+        raise ValueError('Binary target không khớp giả định BENIGN=0')
+    for start in range(0, len(arrays.features), 100000):
+        if not np.isfinite(arrays.features[start:start + 100000]).all():
+            raise ValueError('Representation chứa NaN/Inf')
     return arrays
 
 
@@ -47,7 +66,7 @@ def validate_held_out_label(labels: np.ndarray, label_id: int | None) -> None:
     """LOACO chỉ hợp lệ với một lớp tấn công có thật; BENIGN ID 0 không được held-out."""
     if label_id is None:
         return
-    if int(label_id) == 0:
+    if int(label_id) <= 0:
         raise ValueError("held_out_label_id=0 là BENIGN; LOACO phải giữ lại một lớp tấn công.")
     if not np.any(np.asarray(labels) == int(label_id)):
         raise ValueError(f"held_out_label_id={label_id} không tồn tại trong Phase 2.")

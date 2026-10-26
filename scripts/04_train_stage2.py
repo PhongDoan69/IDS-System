@@ -15,10 +15,14 @@ from src.model_config import experiment_id, load_model_config, phase_directory, 
 from src.model_data import load_prepared_arrays, validate_held_out_label
 from src.stage2 import attack_class_mapping, remap_targets, stage2_matrix
 from src.training_utils import save_json
+from src.contracts import assert_new_outputs, probability_vector, probability_matrix
+from src.artifact_contracts import read_contract, write_contract, require_link, sidecar
+from src.research_protocol import require_preprocessing
 
 
 EXPERIMENTS = {
     "latent_only": ("xgboost", False),
+    "latent_only_mlp": ("mlp", False),  # Control MLP, chưa có kết quả lịch sử.
     "latent_plus_pattack_xgb": ("xgboost", True),
     "latent_plus_pattack_mlp": ("mlp", True),
 }
@@ -28,6 +32,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Stage 2: phân loại đa lớp cho các flow tấn công.")
     parser.add_argument("--config", default=str(PROJECT_ROOT / "configs" / "model_config.json"))
     parser.add_argument("--run-id", default=None)
+    parser.add_argument('--protocol', choices=['revised_v1'], required=True)
     parser.add_argument("--experiment", choices=sorted(EXPERIMENTS), required=True)
     parser.add_argument("--latent-path", default=None)
     parser.add_argument("--p-attack-path", default=None)
@@ -53,6 +58,11 @@ def main() -> None:
     processed_dir = project_path(config, config["experiment"]["processed_dir"])
     latent_path = Path(args.latent_path).resolve() if args.latent_path else processed_dir / "experiments" / run_id / "latent_features.npy"
     arrays = load_prepared_arrays(processed_dir, latent_path)
+    _, scaled_path, _ = require_preprocessing(config, run_id, args.held_out_label_id)
+    latent_record = read_contract(latent_path, config, args.held_out_label_id, kind='latent', run_id=run_id)
+    require_link(latent_record, scaled_path)
+    if arrays.features.shape[1] != int(config['autoencoder']['latent_dim']):
+        raise ValueError('Latent dimension không khớp config')
     validate_held_out_label(arrays.attack_label_ids, args.held_out_label_id)
     p_attack_path = None
     p_attack = None
@@ -61,6 +71,7 @@ def main() -> None:
             raise ValueError("Thí nghiệm latent+P_attack bắt buộc truyền --p-attack-path của Stage 1.")
         p_attack_path = Path(args.p_attack_path).resolve()
         p_attack = np.load(p_attack_path, mmap_mode="r")
+        read_contract(p_attack_path, config, args.held_out_label_id, kind='p_attack', run_id=run_id)
         if len(p_attack) != len(arrays.features):
             raise ValueError("P_attack không cùng số dòng với latent/Phase 2")
 
@@ -84,7 +95,9 @@ def main() -> None:
     model_dir = phase_directory(config, "models_dir", "stage2", run_id) / args.experiment
     result_dir = phase_directory(config, "results_dir", "stage2", run_id) / args.experiment
     metadata_path = phase_directory(config, "metadata_dir", "stage2", run_id) / f"{args.experiment}.json"
+    assert_new_outputs(model_dir, result_dir, metadata_path)
     plan = {
+        'protocol': args.protocol,
         "run_id": run_id,
         "experiment": args.experiment,
         "model": model_kind,
@@ -101,8 +114,7 @@ def main() -> None:
     print(plan)
     if uses_p_attack:
         relevant = np.concatenate([train_indices, validation_indices, test_indices])
-        if not np.isfinite(np.asarray(p_attack[relevant])).all():
-            raise ValueError("P_attack chứa NaN/Inf tại dòng cần dùng; kiểm tra cùng run-id/LOACO.")
+        probability_vector(p_attack[relevant], length=len(relevant))
     if args.check_only:
         print("CHECK-ONLY OK: không fit Stage 2.")
         return
@@ -110,6 +122,8 @@ def main() -> None:
     # Ma trận latent nhỏ hơn nhiều so với 84 đặc trưng; tạo một bản float32 trong RAM.
     all_indices = np.arange(len(arrays.features), dtype=np.int64)
     features = stage2_matrix(arrays.features, all_indices, p_attack if uses_p_attack else None)
+    plan['input_dim'] = int(features.shape[1])
+    save_json(metadata_path, {**plan, 'status': 'running'})
     validation_probabilities: np.ndarray
     test_probabilities: np.ndarray
 
@@ -153,6 +167,8 @@ def main() -> None:
     np.save(result_dir / "test_indices.npy", test_indices)
     np.save(result_dir / "test_probabilities.npy", test_probabilities)
     class_ids = np.asarray([reverse[position] for position in range(len(reverse))], dtype=np.int32)
+    probability_matrix(validation_probabilities, class_ids, len(validation_indices), args.held_out_label_id)
+    probability_matrix(test_probabilities, class_ids, len(test_indices), args.held_out_label_id)
     np.save(result_dir / "class_ids.npy", class_ids)
     known_probabilities = test_probabilities[known_test_positions]
     known_predictions = class_ids[np.argmax(known_probabilities, axis=1)]
@@ -169,6 +185,10 @@ def main() -> None:
     }
     save_json(metadata_path, report)
     save_json(result_dir / "metrics.json", report)
+    parents = [latent_path, sidecar(latent_path), metadata_path, *sorted(model_dir.glob('*'))]
+    if uses_p_attack:
+        parents.extend([p_attack_path, sidecar(p_attack_path)])
+    write_contract(result_dir, config, run_id, args.held_out_label_id, 'stage2', parents=parents, extra=plan)
     print(f"Đã lưu xác suất Stage 2: {result_dir}")
 
 

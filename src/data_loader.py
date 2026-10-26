@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+import csv
 from pathlib import Path
 from typing import Iterator
 
@@ -12,7 +13,10 @@ from src.utils import sha256_file
 
 
 def normalize_column_names(columns: list[object]) -> list[str]:
-    return [" ".join(str(column).strip().split()) for column in columns]
+    normalized = [" ".join(str(column).strip().split()) for column in columns]
+    if len(set(normalized)) != len(normalized) or any(not c for c in normalized):
+        raise ValueError('Tên cột rỗng hoặc trùng sau chuẩn hóa')
+    return normalized
 
 
 def dataset_paths(config: dict) -> list[Path]:
@@ -27,7 +31,10 @@ def dataset_paths(config: dict) -> list[Path]:
 def inspect_schema(config: dict) -> list[str]:
     schemas: dict[str, list[str]] = {}
     for path in dataset_paths(config):
-        columns = normalize_column_names(pd.read_csv(path, nrows=0).columns.tolist())
+        # Đọc header gốc trước pandas: pandas có thể tự đổi duplicate thành tên .1,
+        # làm mất bằng chứng schema trùng nếu chỉ kiểm DataFrame.columns.
+        with path.open('r', encoding='utf-8-sig', newline='') as stream:
+            columns = normalize_column_names(next(csv.reader(stream), []))
         schemas[path.name] = columns
     unique = {tuple(columns) for columns in schemas.values()}
     if len(unique) != 1:

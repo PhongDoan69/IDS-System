@@ -33,7 +33,7 @@ def clean_chunk(frame: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
     for column in numeric_columns:
         result[column] = pd.to_numeric(result[column], errors="coerce")
     result[numeric_columns] = result[numeric_columns].replace([np.inf, -np.inf], np.nan)
-    invalid_mask = result[numeric_columns].isna().any(axis=1) | result["Label"].isna()
+    invalid_mask = result[numeric_columns].isna().any(axis=1) | result["Label"].isna() | result['Label'].astype(str).str.strip().eq('')
     removed = int(invalid_mask.sum())
     if removed:
         result = result.loc[~invalid_mask].copy()
@@ -48,6 +48,9 @@ def clean_chunk(frame: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
 def feature_columns(schema: list[str], excluded: list[str]) -> list[str]:
     excluded_set = set(excluded)
     columns = [column for column in schema if column not in excluded_set]
+    forbidden = {'Label', 'Timestamp', 'Attempted Category', 'Src IP dec', 'Dst IP dec'}
+    if forbidden.intersection(columns):
+        raise ValueError('Schema feature còn nhãn/annotation/identifier bị cấm theo protocol')
     unexpected = DERIVED_COLUMNS.intersection(columns)
     if unexpected:
         raise ValueError(f"Derived labels cannot be model features: {sorted(unexpected)}")
@@ -74,6 +77,8 @@ class TrainOnlyStandardScaler:
             return self
         if not np.isfinite(array).all():
             raise ValueError("Scaler input contains NaN or infinity")
+        if self.mean_ is not None and array.shape[1] != len(self.mean_):
+            raise ValueError('Scaler partial_fit nhận số cột khác lần trước')
 
         batch_count = len(array)
         batch_mean = array.mean(axis=0)
@@ -102,6 +107,8 @@ class TrainOnlyStandardScaler:
         if self.mean_ is None or self.scale_ is None:
             raise RuntimeError("Scaler has not been fitted")
         array = np.asarray(values, dtype=np.float64)
+        if array.ndim != 2 or array.shape[1] != len(self.mean_) or not np.isfinite(array).all():
+            raise ValueError('Scaler transform: sai chiều hoặc có NaN/Inf')
         transformed = (array - self.mean_) / self.scale_
         return transformed.astype(dtype, copy=False)
 

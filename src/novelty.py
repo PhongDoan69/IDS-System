@@ -20,6 +20,10 @@ def threshold_from_known_validation(scores: np.ndarray, known_rejection_rate: fl
     """Ngưỡng chỉ lấy từ known validation; test/zero-day không được dùng để chọn ngưỡng."""
     if not 0.0 < known_rejection_rate < 1.0:
         raise ValueError("known_rejection_rate phải thuộc (0, 1)")
+    from src.contracts import finite_vector
+    scores = finite_vector(scores, 'known validation novelty scores')
+    if not len(scores):
+        raise ValueError('Không thể chọn threshold trên validation rỗng')
     return float(np.quantile(np.asarray(scores), 1.0 - known_rejection_rate))
 
 

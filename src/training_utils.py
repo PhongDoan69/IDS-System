@@ -27,6 +27,8 @@ class EarlyStopping:
 
     def update(self, score: float) -> bool:
         """Trả True khi metric tốt hơn để caller lưu checkpoint ra đĩa."""
+        if not np.isfinite(score):
+            raise ValueError('Early stopping nhận metric NaN/Inf')
         improved = self.best_score is None
         if self.best_score is not None:
             if self.mode == "min":
@@ -48,8 +50,10 @@ class TrainingHistory:
     validation_loss: list[float] = field(default_factory=list)
     learning_rate: list[float] = field(default_factory=list)
     elapsed_seconds: float = 0.0
+    _started: float = field(default_factory=time.perf_counter, repr=False)
 
     def append(self, epoch: int, train_loss: float, validation_loss: float, learning_rate: float) -> None:
+        self.elapsed_seconds = time.perf_counter() - self._started
         self.epoch.append(int(epoch))
         self.train_loss.append(float(train_loss))
         self.validation_loss.append(float(validation_loss))
