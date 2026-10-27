@@ -1,0 +1,106 @@
+{
+  "study_id": "loaco_more_v1",
+  "reference_round": "round2_20261027_fp32_s42",
+  "held_out_classes": [
+    {
+      "id": 9,
+      "name": "DoS Hulk",
+      "train": 110928,
+      "validation": 23770,
+      "test": 23770
+    },
+    {
+      "id": 25,
+      "name": "Portscan",
+      "train": 111346,
+      "validation": 23860,
+      "test": 23860
+    }
+  ],
+  "seeds": [
+    42
+  ],
+  "profiles": {
+    "baseline": {
+      "stage1": {},
+      "stage2": {}
+    },
+    "regularized": {
+      "stage1": {
+        "max_depth": 6,
+        "min_child_weight": 8,
+        "reg_lambda": 10.0
+      },
+      "stage2": {
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "reg_lambda": 10.0
+      }
+    }
+  },
+  "trials": [
+    {
+      "run_id": "loaco_more_v1_h9_s42_baseline",
+      "held_out": 9,
+      "seed": 42,
+      "profile": "baseline"
+    },
+    {
+      "run_id": "loaco_more_v1_h9_s42_regularized",
+      "held_out": 9,
+      "seed": 42,
+      "profile": "regularized"
+    },
+    {
+      "run_id": "loaco_more_v1_h25_s42_baseline",
+      "held_out": 25,
+      "seed": 42,
+      "profile": "baseline"
+    },
+    {
+      "run_id": "loaco_more_v1_h25_s42_regularized",
+      "held_out": 25,
+      "seed": 42,
+      "profile": "regularized"
+    }
+  ],
+  "fixed_pipeline": "AE(16) -> XGBoost latent binary gate 0.5 -> XGBoost latent_only multiclass -> max_probability (known validation rejection 0.05)",
+  "selection": "within each (held-out, seed), highest Stage2 known-validation macro-F1; ties Stage1 validation F1 then profile order",
+  "test_policy": "test/unknown metrics excluded from selection; evaluate only chosen profile per (held-out, seed)",
+  "split_policy": "Phase-2 split remains fixed at seed 42; --seeds changes fitting randomness, not the split",
+  "source_hashes": {
+    "D:\\CAO HOC\\IDS System\\src\\artifact_contracts.py": "b3f25b67d20835d661a6c1d47f3128fa38b693b211cd0fc43cfbe00dba1d94ab",
+    "D:\\CAO HOC\\IDS System\\src\\autoencoder.py": "723bab1a28a78e1c4297d777f3af016a4a362e6be89aa000b922fde0cd1df42b",
+    "D:\\CAO HOC\\IDS System\\src\\calibration.py": "9f9efb4c035e4b8342d7a4ac27967a96c7d59a7604aa1b75c6ade08655703c5d",
+    "D:\\CAO HOC\\IDS System\\src\\contracts.py": "c86ece3e30c6df5ad2704909cf64d6b710250ca4a5997e25ce12f66d820c3d51",
+    "D:\\CAO HOC\\IDS System\\src\\evaluation.py": "e102f4f100c9595d2b59be9ff6562f4d1714058c03ae285f77ae9b67276f9700",
+    "D:\\CAO HOC\\IDS System\\src\\metrics.py": "3912e7be700c590c1c71ed62057ddcca877b6b006a8dd71816c814a95bfced1d",
+    "D:\\CAO HOC\\IDS System\\src\\model_config.py": "b28d52269b38438aaef70311bb649133a6a07a10c9b705977426e5e0bd56065f",
+    "D:\\CAO HOC\\IDS System\\src\\model_data.py": "38d6a6dc2bf23679c3b1d920a05812b5b6d1a27f3ec4a5e4639b804e80c57a4c",
+    "D:\\CAO HOC\\IDS System\\src\\novelty.py": "7c3816fb978b4c31062066b54423b2a60c81ae6b17c2121f420fb57fdf1bf4e0",
+    "D:\\CAO HOC\\IDS System\\src\\preprocessing.py": "0423336dbdcf66b73578fba63404001378c519aa04872752cac2f1faae6e339c",
+    "D:\\CAO HOC\\IDS System\\src\\research_protocol.py": "caca47c4578b94d7990a920602e57040b54c16971018dc415e8d9a228c42c456",
+    "D:\\CAO HOC\\IDS System\\src\\split_data.py": "79214a4c39c27c7a03e79833d0e2bb7c6f04d277d53b7e0b10000ba0e59ff917",
+    "D:\\CAO HOC\\IDS System\\src\\stage1_protocol.py": "32c3d5aff831c93ca931e262db0ec9c6b4123e6c9dad962f16e697368df59eff",
+    "D:\\CAO HOC\\IDS System\\src\\stage1_xgboost.py": "dac0570329f28056a5300c0852ec58933cb5b9fae9cfc428e61365a3415c6a70",
+    "D:\\CAO HOC\\IDS System\\src\\stage2.py": "bdf7bf950ce67b96194c13de0293f031803ee83eb5702e92b65f854d89ff5457",
+    "D:\\CAO HOC\\IDS System\\src\\training_utils.py": "5be1fae0ea6f04b4f138de7a78ccad0b8166eb24027e72ac89a6fcbb88cdf389",
+    "D:\\CAO HOC\\IDS System\\scripts\\01b_prepare_protocol.py": "fc16cdc5be240ae1cc44b3fa928f9530582c8e786f1d2019ee27ff57d9563983",
+    "D:\\CAO HOC\\IDS System\\scripts\\02_train_autoencoder.py": "dc39fbca35d9cfc888bae5842b2125f6ac0dfa1244242a62137ba15b2c0270e7",
+    "D:\\CAO HOC\\IDS System\\scripts\\03_train_stage1.py": "6432896ea1360ec46b0692cca377b9094be7e248628984834ea2761c3f2da43f",
+    "D:\\CAO HOC\\IDS System\\scripts\\04_train_stage2.py": "a0891c3542661ca198876a3a79546c6fbfb4c96d5eebbd5f5dcd3933fb0fe578",
+    "D:\\CAO HOC\\IDS System\\scripts\\05_train_novelty.py": "dad6ad38a57ff16b984c4944010d82c2b1b14333d9e067f18529da6f4caed21c",
+    "D:\\CAO HOC\\IDS System\\scripts\\06_evaluate_pipeline.py": "d40a1d62c7c96364f1c70a7c423e1aca3b59d13d0337c3f69593c73a10a54b68"
+  },
+  "wrapper_sha256": "e00ee860cc24e72f2a9cf1ce99506507bf9c1d93d468ec2bca58a610938488c8",
+  "free_gib": 7.0,
+  "estimated_required_gib": 6.8,
+  "disk_warning": "estimate only; no artifacts will be deleted automatically",
+  "limitations": [
+    "historical DDoS test already inspected",
+    "candidate training scripts themselves write test scores before selection; selector reads validation fields only",
+    "fixed random split has feature-vector overlap; no time/source-separated evidence",
+    "per-fold best hyperparameters are not one globally validated setting",
+    "zero-day means held-out class simulation, not real-world future attacks"
+  ]
+}

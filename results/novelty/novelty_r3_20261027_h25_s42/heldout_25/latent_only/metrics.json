@@ -1,0 +1,50 @@
+{
+  "run_id": "novelty_r3_20261027_h25_s42",
+  "protocol": "revised_v1",
+  "evaluation_protocol": "leave_one_attack_class_out",
+  "stage2_variant": "latent_only",
+  "held_out_label_id": 25,
+  "held_out_test_samples": 23860,
+  "known_train_attack_samples": 248641,
+  "known_validation_attack_samples": 53281,
+  "all_test_samples": 314521,
+  "methods": [
+    "max_probability",
+    "mahalanobis",
+    "knn_distance"
+  ],
+  "verified_upstream_metadata": [
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\autoencoder\\novelty_r3_20261027_h25_s42\\run.json",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\stage1\\novelty_r3_20261027_h25_s42\\xgboost_latent.json",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\stage2\\novelty_r3_20261027_h25_s42\\latent_only.json"
+  ],
+  "threshold_source": "known validation attacks only",
+  "test_used_for_fit_or_threshold": false,
+  "metrics": {
+    "max_probability": {
+      "threshold": 0.0011472702026367188,
+      "unknown_recall": 0.33055322715842417,
+      "unknown_f1": 0.45917387127761766,
+      "known_false_rejection_rate": 0.04891049342167001,
+      "open_set_roc_auc": 0.7685217616800316,
+      "open_set_pr_auc": 0.6315305504276653
+    },
+    "mahalanobis": {
+      "threshold": 17.30690335215706,
+      "unknown_recall": 0.07791282481139983,
+      "unknown_f1": 0.1312343369453955,
+      "known_false_rejection_rate": 0.049023103920722205,
+      "open_set_roc_auc": 0.3512082942934276,
+      "open_set_pr_auc": 0.2625475660960287
+    },
+    "knn_distance": {
+      "threshold": 0.0024717730427952726,
+      "unknown_recall": 0.6351634534786254,
+      "unknown_f1": 0.7275738735927411,
+      "known_false_rejection_rate": 0.04962369324900058,
+      "open_set_roc_auc": 0.9129758885000625,
+      "open_set_pr_auc": 0.858164593006492
+    }
+  },
+  "status": "completed"
+}

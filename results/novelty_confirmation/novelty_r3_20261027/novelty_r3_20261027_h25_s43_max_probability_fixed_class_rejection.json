@@ -1,0 +1,127 @@
+{
+  "1": {
+    "support": 2,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "2": {
+    "support": 596,
+    "rejected_unknown": 2,
+    "false_rejection_rate": 0.003355704697986577
+  },
+  "3": {
+    "support": 444,
+    "rejected_unknown": 2,
+    "false_rejection_rate": 0.0045045045045045045
+  },
+  "4": {
+    "support": 4,
+    "rejected_unknown": 2,
+    "false_rejection_rate": 0.5
+  },
+  "5": {
+    "support": 579,
+    "rejected_unknown": 42,
+    "false_rejection_rate": 0.07253886010362694
+  },
+  "6": {
+    "support": 277,
+    "rejected_unknown": 3,
+    "false_rejection_rate": 0.010830324909747292
+  },
+  "7": {
+    "support": 261,
+    "rejected_unknown": 29,
+    "false_rejection_rate": 0.1111111111111111
+  },
+  "8": {
+    "support": 505,
+    "rejected_unknown": 4,
+    "false_rejection_rate": 0.007920792079207921
+  },
+  "9": {
+    "support": 23770,
+    "rejected_unknown": 1402,
+    "false_rejection_rate": 0.05898190997055112
+  },
+  "10": {
+    "support": 87,
+    "rejected_unknown": 4,
+    "false_rejection_rate": 0.04597701149425287
+  },
+  "11": {
+    "support": 1135,
+    "rejected_unknown": 191,
+    "false_rejection_rate": 0.1682819383259912
+  },
+  "12": {
+    "support": 2,
+    "rejected_unknown": 1,
+    "false_rejection_rate": 0.5
+  },
+  "13": {
+    "support": 12,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "14": {
+    "support": 194,
+    "rejected_unknown": 76,
+    "false_rejection_rate": 0.3917525773195876
+  },
+  "15": {
+    "support": 11,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "16": {
+    "support": 7,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "17": {
+    "support": 5,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "18": {
+    "support": 10294,
+    "rejected_unknown": 259,
+    "false_rejection_rate": 0.025160287546143384
+  },
+  "19": {
+    "support": 98,
+    "rejected_unknown": 70,
+    "false_rejection_rate": 0.7142857142857143
+  },
+  "20": {
+    "support": 3,
+    "rejected_unknown": 1,
+    "false_rejection_rate": 0.3333333333333333
+  },
+  "21": {
+    "support": 1,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "22": {
+    "support": 2,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "23": {
+    "support": 610,
+    "rejected_unknown": 21,
+    "false_rejection_rate": 0.03442622950819672
+  },
+  "24": {
+    "support": 110,
+    "rejected_unknown": 2,
+    "false_rejection_rate": 0.01818181818181818
+  },
+  "26": {
+    "support": 14272,
+    "rejected_unknown": 466,
+    "false_rejection_rate": 0.03265134529147982
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "method": "mahalanobis",
+  "threshold": 17.30690335215706,
+  "run_id": "recall_gate_v1_20261027_h25_s42",
+  "study_id": "mahalanobis_v1",
+  "held_out_label_id": 25,
+  "known_rejection_rate_target": 0.05,
+  "selected_on": "known_validation_only"
+}

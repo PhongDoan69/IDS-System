@@ -1,0 +1,127 @@
+{
+  "1": {
+    "support": 2,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "2": {
+    "support": 596,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "3": {
+    "support": 444,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "4": {
+    "support": 4,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "5": {
+    "support": 579,
+    "rejected_unknown": 494,
+    "false_rejection_rate": 0.853195164075993
+  },
+  "6": {
+    "support": 277,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "7": {
+    "support": 261,
+    "rejected_unknown": 220,
+    "false_rejection_rate": 0.842911877394636
+  },
+  "8": {
+    "support": 505,
+    "rejected_unknown": 36,
+    "false_rejection_rate": 0.07128712871287128
+  },
+  "9": {
+    "support": 23770,
+    "rejected_unknown": 759,
+    "false_rejection_rate": 0.03193100546907867
+  },
+  "10": {
+    "support": 87,
+    "rejected_unknown": 61,
+    "false_rejection_rate": 0.7011494252873564
+  },
+  "11": {
+    "support": 1135,
+    "rejected_unknown": 408,
+    "false_rejection_rate": 0.3594713656387665
+  },
+  "12": {
+    "support": 2,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "13": {
+    "support": 12,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "14": {
+    "support": 194,
+    "rejected_unknown": 3,
+    "false_rejection_rate": 0.015463917525773196
+  },
+  "15": {
+    "support": 11,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "16": {
+    "support": 7,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "17": {
+    "support": 5,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "18": {
+    "support": 10294,
+    "rejected_unknown": 758,
+    "false_rejection_rate": 0.07363512725859724
+  },
+  "19": {
+    "support": 98,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "20": {
+    "support": 3,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "21": {
+    "support": 1,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "22": {
+    "support": 2,
+    "rejected_unknown": 0,
+    "false_rejection_rate": 0.0
+  },
+  "23": {
+    "support": 610,
+    "rejected_unknown": 21,
+    "false_rejection_rate": 0.03442622950819672
+  },
+  "24": {
+    "support": 110,
+    "rejected_unknown": 5,
+    "false_rejection_rate": 0.045454545454545456
+  },
+  "25": {
+    "support": 23860,
+    "rejected_unknown": 377,
+    "false_rejection_rate": 0.015800502933780384
+  }
+}

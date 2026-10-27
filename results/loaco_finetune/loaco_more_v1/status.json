@@ -1,0 +1,31 @@
+{
+  "status": "failed",
+  "pid": 7684,
+  "started_utc": "2026-10-27T02:18:07.816514+00:00",
+  "steps": [
+    {
+      "name": "loaco_more_v1_h9_s42_baseline_preprocess",
+      "command": [
+        "D:\\CAO HOC\\IDS System\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "scripts/01b_prepare_protocol.py",
+        "--config",
+        "D:\\CAO HOC\\IDS System\\configs\\loaco_finetune_loaco_more_v1_h9_s42_baseline.json",
+        "--run-id",
+        "loaco_more_v1_h9_s42_baseline",
+        "--held-out-label-id",
+        "9"
+      ],
+      "log": "D:\\CAO HOC\\IDS System\\results\\loaco_finetune\\loaco_more_v1\\logs\\000_loaco_more_v1_h9_s42_baseline_preprocess.log",
+      "status": "running",
+      "started_utc": "2026-10-27T02:18:07.947514+00:00",
+      "child_pid": 8196
+    }
+  ],
+  "current_step": "loaco_more_v1_h9_s42_baseline_preprocess",
+  "error": "",
+  "ended_utc": "2026-10-27T02:18:20.186527+00:00"
+}

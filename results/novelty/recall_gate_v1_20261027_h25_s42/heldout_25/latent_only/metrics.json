@@ -1,0 +1,32 @@
+{
+  "run_id": "recall_gate_v1_20261027_h25_s42",
+  "protocol": "revised_v1",
+  "evaluation_protocol": "leave_one_attack_class_out",
+  "stage2_variant": "latent_only",
+  "held_out_label_id": 25,
+  "held_out_test_samples": 23860,
+  "known_train_attack_samples": 248641,
+  "known_validation_attack_samples": 53281,
+  "all_test_samples": 314521,
+  "methods": [
+    "max_probability"
+  ],
+  "verified_upstream_metadata": [
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\autoencoder\\recall_gate_v1_20261027_h25_s42\\run.json",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\stage1\\recall_gate_v1_20261027_h25_s42\\xgboost_latent.json",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\stage2\\recall_gate_v1_20261027_h25_s42\\latent_only.json"
+  ],
+  "threshold_source": "known validation attacks only",
+  "test_used_for_fit_or_threshold": false,
+  "metrics": {
+    "max_probability": {
+      "threshold": 0.0011472702026367188,
+      "unknown_recall": 0.33055322715842417,
+      "unknown_f1": 0.45917387127761766,
+      "known_false_rejection_rate": 0.04891049342167001,
+      "open_set_roc_auc": 0.7685217616800316,
+      "open_set_pr_auc": 0.6315305504276653
+    }
+  },
+  "status": "completed"
+}

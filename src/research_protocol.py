@@ -2,11 +2,12 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import numpy as np
 
-from src.artifact_contracts import read_contract, write_contract, metadata_directory
+from src.artifact_contracts import read_contract, write_contract, metadata_directory, sidecar
 from src.contracts import assert_new_outputs, exact_indices
 from src.model_config import project_path
 from src.model_data import load_prepared_arrays, split_indices, validate_held_out_label
@@ -18,7 +19,7 @@ def protocol_directory(config, run_id):
     return project_path(config, config['experiment']['processed_dir']) / 'experiments' / run_id / 'preprocessing'
 
 
-def fit_transform_scope(raw, fit_indices, output, scaler_path, batch_size=100000):
+def fit_transform_scope(raw, fit_indices, output, scaler_path, batch_size=100000, reuse_scaled=None):
     """Fit đúng indices được giao, transform toàn bộ nhưng không cập nhật state."""
     fit_indices = np.asarray(fit_indices, dtype=np.int64)
     if not len(fit_indices) or len(np.unique(fit_indices)) != len(fit_indices):
@@ -29,6 +30,22 @@ def fit_transform_scope(raw, fit_indices, output, scaler_path, batch_size=100000
     save_scaler(scaler, Path(scaler_path))
     output = Path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
+    if reuse_scaled is not None:
+        # Storage optimization only. Refit scaler above and recompute EVERY row;
+        # link immutable bytes only if the new float32 transform is exactly equal.
+        # No fallback to copying: an unavailable hard-link must fail disk preflight.
+        source = np.load(reuse_scaled, mmap_mode='r', allow_pickle=False)
+        try:
+            if source.shape != raw.shape or source.dtype != np.float32:
+                raise ValueError('Shared preprocessing shape/dtype mismatch')
+            for start in range(0, len(raw), batch_size):
+                calculated = scaler.transform(raw[start:start + batch_size]).astype(np.float32)
+                if not np.array_equal(calculated, source[start:start + batch_size]):
+                    raise ValueError('Shared preprocessing differs from freshly fitted transform')
+        finally:
+            source._mmap.close()
+        os.link(reuse_scaled, output)  # fails if output exists; never mutate linked arrays
+        return np.load(output, mmap_mode='r', allow_pickle=False)
     destination = np.lib.format.open_memmap(output, mode='w+', dtype='float32', shape=raw.shape)
     for start in range(0, len(raw), batch_size):
         destination[start:start + batch_size] = scaler.transform(raw[start:start + batch_size])
@@ -57,15 +74,32 @@ def prepare_protocol(config, run_id, held_out, check_only=False):
             'output': str(directory), 'status': 'checked_only' if check_only else 'running'}
     print(plan)
     if check_only:
+        arrays.close()
         return plan
+    shared_run = config['experiment'].get('verified_preprocessing_storage_source')
+    source_path = None
+    shared_parents = []
+    if shared_run:
+        from src.model_config import experiment_id
+        experiment_id(config, shared_run)
+        if shared_run == run_id:
+            raise ValueError('Cannot share preprocessing with the same run')
+        previous, source_path, _ = require_preprocessing(config, shared_run, held_out)
+        previous.close()
+        shared_parents = [source_path, sidecar(source_path)]
+        plan['storage_source_run'] = shared_run
+        plan['storage_policy'] = 'fresh scaler fit + full exact transform replay, then immutable hard-link'
     directory.mkdir(parents=True)
     save_json(directory / 'execution.json', plan)
     np.save(directory / 'fit_indices.npy', fit)
-    fit_transform_scope(arrays.features, fit, directory / 'features_scaled.npy', directory / 'scaler.joblib')
+    transformed = fit_transform_scope(arrays.features, fit, directory / 'features_scaled.npy',
+                                      directory / 'scaler.joblib', reuse_scaled=source_path)
+    transformed._mmap.close()
+    arrays.close()
     plan['status'] = 'completed'
     save_json(directory / 'execution.json', plan)
     write_contract(directory / 'features_scaled.npy', config, run_id, held_out, 'preprocessing',
-                   parents=[processed / 'features_raw.npy', directory / 'scaler.joblib', directory / 'fit_indices.npy'],
+                   parents=[processed / 'features_raw.npy', directory / 'scaler.joblib', directory / 'fit_indices.npy', *shared_parents],
                    extra=plan)
     return plan
 

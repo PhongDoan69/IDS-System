@@ -141,7 +141,13 @@ def encode_to_memmap(
     device,
     hardware: dict[str, Any],
 ) -> None:
-    """Mã hóa theo batch và giữ nguyên thứ tự dòng Phase 2 để ghép nhãn/split an toàn."""
+    """Encode all splits uniformly in FP32; keep row order and always close mmap.
+
+    A known-only scaler may legitimately produce unseen values beyond FP16's
+    finite range (65504). Do not clip/drop these rows or fit on heldout data.
+    FP32 is an encoding precision policy, not per-row/test-driven fallback.
+    Training AMP, checkpoint selection and all statistical scopes stay unchanged.
+    """
     import torch
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -151,18 +157,25 @@ def encode_to_memmap(
         dtype=np.float32,
         shape=(len(features), latent_dim),
     )
-    model.eval()
-    amp_enabled = bool(hardware.get("mixed_precision", True)) and device.type == "cuda"
-    amp_dtype = torch.float16 if hardware.get("amp_dtype") == "float16" else torch.bfloat16
-    with torch.inference_mode():
-        all_indices = np.arange(len(features), dtype=np.int64)
-        for indices in iter_index_batches(all_indices, batch_size, shuffle=False, random_state=0):
-            batch = torch_batch(features, indices, device, hardware.get("pin_memory", True))
-            with torch.autocast(device_type=device.type, dtype=amp_dtype, enabled=amp_enabled):
-                latent = model.encode(batch)
-            values = latent.float().cpu().numpy()
-            if not np.isfinite(values).all():
-                raise ValueError('Encoder sinh NaN/Inf; không công nhận latent artifact completed')
-            destination[indices] = values
-    destination.flush()
+    try:
+        model.float().eval()
+        with torch.inference_mode():
+            all_indices = np.arange(len(features), dtype=np.int64)
+            for indices in iter_index_batches(all_indices, batch_size, shuffle=False, random_state=0):
+                batch = torch_batch(features, indices, device, hardware.get("pin_memory", True)).float()
+                if not torch.isfinite(batch).all():
+                    raise ValueError("Encoder input contains NaN/Inf; no clipping or imputation.")
+                # Disable even an enclosing autocast context; every row uses the
+                # same precision. mixed_precision still controls TRAINING only.
+                with torch.autocast(device_type=device.type, enabled=False):
+                    latent = model.encode(batch)
+                values = latent.float().cpu().numpy()
+                if not np.isfinite(values).all():
+                    raise ValueError(f"Encoder FP32 sinh NaN/Inf tại rows {indices[0]}..{indices[-1]}; artifact incomplete")
+                destination[indices] = values
+        destination.flush()
+    finally:
+        # Otherwise traceback retains this writable mapping and Windows cache
+        # cleanup masks the original numeric exception with WinError 32/267.
+        destination._mmap.close()
 

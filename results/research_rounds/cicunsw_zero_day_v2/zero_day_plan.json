@@ -1,0 +1,65 @@
+{
+  "input_protocol": "external_native_v2_zero_day",
+  "cases": [
+    {
+      "label_id": 3,
+      "label": "DoS",
+      "support": {
+        "train": 3088,
+        "validation": 662,
+        "test": 662
+      },
+      "excluded_from_fit": [
+        "scaler",
+        "AE",
+        "OOF",
+        "Stage1",
+        "Stage2",
+        "novelty"
+      ],
+      "excluded_from_selection": [
+        "early stopping",
+        "calibration",
+        "threshold"
+      ],
+      "unknown_evaluation_scope": "heldout TEST rows only; heldout train/validation unused",
+      "unknown_test_feature_matches_known_train": 10,
+      "overlap_interpretation": "identical float32 X across labels; independence risk, NOT temporal/group validation"
+    },
+    {
+      "label_id": 4,
+      "label": "Exploits",
+      "support": {
+        "train": 21638,
+        "validation": 4636,
+        "test": 4636
+      },
+      "excluded_from_fit": [
+        "scaler",
+        "AE",
+        "OOF",
+        "Stage1",
+        "Stage2",
+        "novelty"
+      ],
+      "excluded_from_selection": [
+        "early stopping",
+        "calibration",
+        "threshold"
+      ],
+      "unknown_evaluation_scope": "heldout TEST rows only; heldout train/validation unused",
+      "unknown_test_feature_matches_known_train": 7,
+      "overlap_interpretation": "identical float32 X across labels; independence risk, NOT temporal/group validation"
+    }
+  ],
+  "primary_stage2": "latent_plus_pattack_xgb",
+  "methods": [
+    "max_probability",
+    "one_class_svm",
+    "isolation_forest"
+  ],
+  "seed": 42,
+  "threshold_source": "known attack validation only; rejection=0.05",
+  "test_used_for_selection": false,
+  "family_disjointness": "NOT GUARANTEED"
+}

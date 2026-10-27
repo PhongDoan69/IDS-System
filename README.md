@@ -1,5 +1,15 @@
 # IDS System - CICIDS2017 Research Pipeline
 
+Kết quả JSON/CSV/Markdown để truy vấn và đối chiếu nằm trong `results/`.
+Đọc [chỉ mục kết quả](docs/research_alignment/PUBLISHED_RESULTS_INDEX.md) để chọn đúng
+study/run, phân biệt final unknown với score-only và nhận biết các run chưa hoàn tất.
+Data/model/prediction/training logs vẫn giữ cục bộ, không được đưa vào Git.
+
+> Cập nhật 27/10/2026: đợt đối chứng novelty nhiều seed dùng AE/XGBoost cố định,
+> kNN balanced–L2–k1 so với MCP và Mahalanobis trên cùng upstream/gate.
+> Xem [protocol và hướng dẫn mới](docs/research_alignment/NOVELTY_MULTISEED_TRAINING_GUIDE.md).
+> Ba held-out × ba seed; các test lịch sử đã xem nên chưa phải xác nhận độc lập.
+
 > Cập nhật 26/10/2026: code training đã chuyển sang corrective protocol `revised_v1`.
 > Dùng [hướng dẫn tái lập mới](docs/research_alignment/PIPELINE_REPRODUCTION_GUIDE.md)
 > và [báo cáo căn chỉnh](docs/research_alignment/02_methodology_alignment_summary.md).
@@ -18,7 +28,8 @@ Code. Mã không tự huấn luyện khi import; scripts training/evaluation có
 1. Autoencoder học latent 16 chiều từ 84 đặc trưng đã scale.
 2. Stage 1 so sánh XGBoost/MLP cho BENIGN vs ATTACK và sinh `P_attack` OOF.
 3. Stage 2 so sánh latent-only với latent + `P_attack` cho phân loại đa lớp tấn công.
-4. Novelty detection dùng LOACO, max probability, One-Class SVM và Isolation Forest.
+4. Novelty detection dùng LOACO: MCP, Mahalanobis và kNN latent trong đối chứng mới;
+   One-Class SVM/Isolation Forest được giữ cho các ablation lịch sử.
 5. Đánh giá end-to-end sinh BENIGN, lớp tấn công đã biết hoặc UNKNOWN_ATTACK.
 
 ## Bắt đầu

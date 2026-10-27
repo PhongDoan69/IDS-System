@@ -1,0 +1,87 @@
+{
+  "status": "failed",
+  "pid": 7036,
+  "started_utc": "2026-10-26T15:45:52.977677+00:00",
+  "steps": [
+    {
+      "name": "environment",
+      "status": "completed",
+      "command": [
+        "D:\\CAO HOC\\IDS System\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "scripts/verify_environment.py",
+        "--config",
+        "D:\\CAO HOC\\IDS System\\configs\\external_model_cicunsw_r1.json"
+      ],
+      "log": "D:\\CAO HOC\\IDS System\\results\\research_rounds\\cicunsw_r1\\logs\\00_environment.log",
+      "started_utc": "2026-10-26T15:45:53.110679+00:00",
+      "child_pid": 23772,
+      "returncode": 0,
+      "seconds": 4.657603100000415,
+      "ended_utc": "2026-10-26T15:45:57.768978+00:00"
+    },
+    {
+      "name": "prepare_native",
+      "status": "completed",
+      "started_utc": "2026-10-26T15:45:57.895501+00:00",
+      "returncode": 0,
+      "seconds": 13.047389300001669
+    },
+    {
+      "name": "main_preprocessing",
+      "status": "completed",
+      "command": [
+        "D:\\CAO HOC\\IDS System\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "D:\\CAO HOC\\IDS System\\scripts\\10_run_cic_unsw_nb15.py",
+        "--_phase",
+        "scripts/01b_prepare_protocol.py",
+        "--config",
+        "D:\\CAO HOC\\IDS System\\configs\\external_model_cicunsw_r1.json",
+        "--run-id",
+        "cicunsw_r1_main"
+      ],
+      "log": "D:\\CAO HOC\\IDS System\\results\\research_rounds\\cicunsw_r1\\logs\\02_main_preprocessing.log",
+      "started_utc": "2026-10-26T15:46:11.065336+00:00",
+      "child_pid": 5340,
+      "returncode": 0,
+      "seconds": 2.055381199999829,
+      "ended_utc": "2026-10-26T15:46:13.121938+00:00"
+    },
+    {
+      "name": "main_autoencoder",
+      "status": "failed",
+      "command": [
+        "D:\\CAO HOC\\IDS System\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "D:\\CAO HOC\\IDS System\\scripts\\10_run_cic_unsw_nb15.py",
+        "--_phase",
+        "scripts/02_train_autoencoder.py",
+        "--config",
+        "D:\\CAO HOC\\IDS System\\configs\\external_model_cicunsw_r1.json",
+        "--run-id",
+        "cicunsw_r1_main",
+        "--protocol",
+        "revised_v1"
+      ],
+      "log": "D:\\CAO HOC\\IDS System\\results\\research_rounds\\cicunsw_r1\\logs\\03_main_autoencoder.log",
+      "started_utc": "2026-10-26T15:46:13.269941+00:00",
+      "child_pid": 22704,
+      "returncode": 1,
+      "seconds": 11.644121900000755,
+      "ended_utc": "2026-10-26T15:46:24.915540+00:00"
+    }
+  ],
+  "current_step": "main_autoencoder",
+  "error": "main_autoencoder thất bại (exit=1); xem D:\\CAO HOC\\IDS System\\results\\research_rounds\\cicunsw_r1\\logs\\03_main_autoencoder.log",
+  "ended_utc": "2026-10-26T15:46:24.916537+00:00"
+}

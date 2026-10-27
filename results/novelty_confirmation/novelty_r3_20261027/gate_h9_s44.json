@@ -1,0 +1,66 @@
+{
+  "threshold": 0.0842248946428299,
+  "baseline_threshold": 0.5,
+  "benign_fpr_budget": 0.001,
+  "allowed_benign_false_positives": 237,
+  "selected_on": "known_validation_only",
+  "criterion": "lowest float32-safe threshold <= baseline satisfying benign FPR budget",
+  "baseline_validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9995975938173901,
+    "balanced_accuracy": 0.9993396224915395,
+    "precision": 0.9988758571589164,
+    "recall_detection_rate": 0.9989320042719829,
+    "f1": 0.9989039299264603,
+    "false_positive_rate": 0.0002527592889038672,
+    "false_negative_rate": 0.001067995728017088,
+    "roc_auc": 0.9999816734400155,
+    "average_precision": 0.9999571377735809,
+    "pr_auc": 0.9999571377735809,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 290751,
+    "brier_score": 0.0003082354669459164,
+    "confusion_matrix": [
+      [
+        237320,
+        60
+      ],
+      [
+        57,
+        53314
+      ]
+    ]
+  },
+  "selected_validation_metrics": {
+    "threshold": 0.0842248946428299,
+    "accuracy": 0.9991264002531376,
+    "balanced_accuracy": 0.9993342758273986,
+    "precision": 0.995596111142212,
+    "recall_detection_rate": 0.9996627381911525,
+    "f1": 0.9976252804786836,
+    "false_positive_rate": 0.000994186536355211,
+    "false_negative_rate": 0.00033726180884750145,
+    "roc_auc": 0.9999816734400155,
+    "average_precision": 0.9999571377735809,
+    "pr_auc": 0.9999571377735809,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 290751,
+    "brier_score": 0.0003082354669459164,
+    "confusion_matrix": [
+      [
+        237144,
+        236
+      ],
+      [
+        18,
+        53353
+      ]
+    ]
+  },
+  "run_id": "novelty_r3_20261027_h9_s44",
+  "held_out_label_id": 9,
+  "p_attack_path": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\experiments\\novelty_r3_20261027_h9_s44\\stage1_xgboost_latent_p_attack_all.npy",
+  "p_attack_sha256": "15d0de11b3157013ef02817cd65d08948cac2dd06066dac9486ae78531a765a0",
+  "validation_samples": 290751,
+  "test_used_for_selection": false
+}

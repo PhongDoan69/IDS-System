@@ -1,0 +1,10 @@
+{
+  "thresholds": {
+    "max_probability": 0.2075454592704773,
+    "mahalanobis": 17.84960253737195,
+    "knn_distance": 0.0008991093755105271
+  },
+  "selected_on": "known_validation_only",
+  "test_queried_at_lock": false,
+  "candidate_selection": "NONE; all fixed methods reported"
+}

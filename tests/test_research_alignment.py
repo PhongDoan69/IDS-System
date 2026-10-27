@@ -127,6 +127,67 @@ class NumericContracts(unittest.TestCase):
             self.assertEqual(tuple(model(x).shape), (3,84))
 
 
+class EncodingPrecisionTests(unittest.TestCase):
+    def test_fp32_encoding_preserves_large_values_order_and_closes_mapping(self):
+        import torch
+        from src.autoencoder import encode_to_memmap
+        class Encoder(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.layer = torch.nn.Linear(1, 1, bias=False)
+                with torch.no_grad():
+                    self.layer.weight.fill_(1)
+                self.output_dtypes = []
+            def encode(self, x):
+                result = self.layer(x)
+                self.output_dtypes.append(result.dtype)
+                return result
+        x = np.array([[4883132.], [-70000.], [3.25]], dtype=np.float32)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "latent.npy"
+            opened = []
+            original = np.lib.format.open_memmap
+            def capture(*args, **kwargs):
+                mapped = original(*args, **kwargs)
+                opened.append(mapped)
+                return mapped
+            model = Encoder()
+            with patch("numpy.lib.format.open_memmap", side_effect=capture), torch.autocast("cpu", dtype=torch.bfloat16):
+                encode_to_memmap(model, x, path, 1, 2, torch.device("cpu"), {"mixed_precision": True})
+            np.testing.assert_array_equal(np.load(path), x)
+            self.assertEqual(model.output_dtypes, [torch.float32, torch.float32])
+            self.assertTrue(opened[0]._mmap.closed)
+            path.rename(path.with_name("closed.npy"))
+
+    def test_encoder_failure_closes_mapping_without_masking_error(self):
+        import torch
+        from src.autoencoder import encode_to_memmap
+        class Broken(torch.nn.Module):
+            def encode(self, x):
+                return torch.full_like(x, float("nan"))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "latent.npy"
+            opened = []
+            original = np.lib.format.open_memmap
+            def capture(*args, **kwargs):
+                mapped = original(*args, **kwargs)
+                opened.append(mapped)
+                return mapped
+            with patch("numpy.lib.format.open_memmap", side_effect=capture):
+                with self.assertRaisesRegex(ValueError, "Encoder FP32"):
+                    encode_to_memmap(Broken(), np.ones((2, 1), dtype=np.float32), path, 1, 2, torch.device("cpu"), {})
+            self.assertTrue(opened[0]._mmap.closed)
+            path.rename(path.with_name("failed_closed.npy"))
+
+    def test_nonfinite_input_is_not_silently_repaired(self):
+        import torch
+        from src.autoencoder import encode_to_memmap
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(ValueError, "Encoder input"):
+                encode_to_memmap(torch.nn.Identity(), np.array([[np.inf]], dtype=np.float32),
+                    Path(directory) / "latent.npy", 1, 1, torch.device("cpu"), {})
+
+
 class ProtocolFixtures(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix='ids_alignment_test_')
@@ -140,6 +201,7 @@ class ProtocolFixtures(unittest.TestCase):
         config['hardware'].update(device='cpu', require_cuda=False, mixed_precision=False)
         config['autoencoder'].update(hidden_dims=[4], latent_dim=2, epochs=2, batch_size=32, encode_batch_size=32)
         config['evaluation']['bootstrap_iterations'] = 2
+        config['evaluation']['save_compact_predictions'] = True
         self.config_path = self.root / 'configs/model_config.json'
         self.config_path.write_text(json.dumps(config), encoding='utf-8')
         self.config = load_model_config(self.config_path)
@@ -164,6 +226,31 @@ class ProtocolFixtures(unittest.TestCase):
         self.assertEqual(scaler.n_samples_seen_, 360)
         with self.assertRaises(FileExistsError): prepare_protocol(self.config, 'clean', 3)
         with self.assertRaises(ValueError): require_preprocessing(self.config, 'clean', 2)
+
+    def test_shared_storage_refits_scaler_and_preserves_contract(self):
+        import os
+        prepare_protocol(self.config, 'storage_source', 3)
+        cfg = copy.deepcopy(self.config)
+        cfg['experiment'].update(random_state=43, verified_preprocessing_storage_source='storage_source')
+        prepare_protocol(cfg, 'storage_new', 3)
+        arrays, linked, record = require_preprocessing(cfg, 'storage_new', 3)
+        arrays.close()
+        original = self.root/'data/experiments/storage_source/preprocessing/features_scaled.npy'
+        self.assertTrue(os.path.samefile(original, linked))
+        self.assertEqual(record['extra']['storage_source_run'], 'storage_source')
+        self.assertFalse(os.path.samefile(original.parent/'scaler.joblib', linked.parent/'scaler.joblib'))
+        with self.assertRaises(ValueError):
+            prepare_protocol(cfg, 'wrong_heldout_storage', 2)
+
+    def test_shared_transform_rejects_nonidentical_bytes(self):
+        from src.research_protocol import fit_transform_scope
+        source = self.root/'bad_scaled.npy'
+        np.save(source, np.zeros_like(self.x))
+        output = self.root/'must_not_be_linked.npy'
+        with self.assertRaisesRegex(ValueError, 'differs from freshly'):
+            fit_transform_scope(self.x, np.arange(10), output, self.root/'fresh_scaler.joblib', reuse_scaled=source)
+        self.assertFalse(output.exists())
+        np.testing.assert_array_equal(np.load(source), np.zeros_like(self.x))
 
     def test_parent_tamper_rejected(self):
         prepare_protocol(self.config, 'clean', None)
@@ -259,7 +346,7 @@ class ProtocolFixtures(unittest.TestCase):
                    '--ae-metadata', str(self.root/'metadata/autoencoder/integration/run.json'),
                    '--stage1-metadata',str(self.root/'metadata/stage1/integration/xgboost_latent.json'),
                    '--stage2-metadata',str(self.root/'metadata/stage2/integration/latent_only.json'),
-                   '--methods','max_probability'])
+                   '--methods','max_probability','mahalanobis','knn_distance'])
         run_script('06_evaluate_pipeline.py', ['--run-id','evaluation', '--held-out-label-id','3',
                    '--p-attack-path',str(p),'--stage2-result-dir',str(s2), '--novelty-method','max_probability',
                    '--novelty-result-dir',str(self.root/'results/novelty/integration/heldout_3/latent_only'),
@@ -268,7 +355,62 @@ class ProtocolFixtures(unittest.TestCase):
         self.assertIn('final_unknown_metrics', report)
         self.assertIn('score_only_unknown_metrics', report)
         self.assertEqual(report['test_samples'], 160)
+        with np.load(self.root/'results/pipeline/evaluation/predictions.npz') as compact:
+            self.assertEqual(len(compact['predicted_label_id']),160)
+            np.testing.assert_array_equal(compact['test_indices'],np.flatnonzero(self.s==2))
         read_contract(self.root/'results/pipeline/evaluation', self.config, 3, kind='pipeline_evaluation')
+        # Actual unified trainer, no fake novelty models, all three methods replay.
+        for name in ['mahalanobis','knn_distance']:
+            run_script('06_evaluate_pipeline.py', ['--run-id','unified_'+name,'--held-out-label-id','3',
+                       '--p-attack-path',str(p),'--stage2-result-dir',str(s2),'--novelty-method',name,
+                       '--novelty-result-dir',str(self.root/'results/novelty/integration/heldout_3/latent_only'),
+                       '--novelty-threshold-json',str(self.root/f'artifacts/thresholds/integration/heldout_3/latent_only/{name}.json')])
+            unified = json.loads((self.root/f'results/pipeline/unified_{name}/metrics.json').read_text(encoding='utf-8'))
+            self.assertEqual(unified['stage1_test_metrics'], report['stage1_test_metrics'])
+            read_contract(self.root/f'results/pipeline/unified_{name}', self.config, 3, kind='pipeline_evaluation')
+        # Reuse the same mocked upstream with a REAL tiny Mahalanobis fit and contracts.
+        from src.mahalanobis import SharedMahalanobis
+        from src.novelty import threshold_from_known_validation
+        from src.training_utils import save_json
+        latent = self.root/'data/experiments/integration/latent_features.npy'
+        x = np.load(latent)
+        fit = np.flatnonzero((self.s == 0) & (self.y != 0) & (self.y != 3))
+        val = np.load(s2/'validation_indices.npy'); test = np.load(s2/'test_indices.npy')
+        model = SharedMahalanobis.fit(x[fit], self.y[fit])
+        threshold = threshold_from_known_validation(model.score(x[val]), .05)
+        destination = self.root/'results/maha_fixture'; destination.mkdir()
+        np.save(destination/'mahalanobis_test_scores.npy', model.score(x[test]))
+        np.save(destination/'test_indices.npy', test)
+        threshold_file = self.root/'maha_threshold.json'
+        save_json(threshold_file, {'method': 'mahalanobis', 'threshold': threshold, 'held_out_label_id': 3})
+        write_contract(destination, self.config, 'integration', 3, 'novelty',
+                       parents=[sidecar(s2), p, sidecar(p), threshold_file])
+        run_script('06_evaluate_pipeline.py', ['--run-id', 'evaluation_maha', '--held-out-label-id', '3',
+                   '--p-attack-path', str(p), '--stage2-result-dir', str(s2),
+                   '--novelty-method', 'mahalanobis', '--novelty-result-dir', str(destination),
+                   '--novelty-threshold-json', str(threshold_file)])
+        maha = json.loads((self.root/'results/pipeline/evaluation_maha/metrics.json').read_text(encoding='utf-8'))
+        self.assertEqual(maha['stage1_test_metrics'], report['stage1_test_metrics'])
+        self.assertEqual(maha['final_unknown_metrics']['unknown_blocked_by_stage1'], report['final_unknown_metrics']['unknown_blocked_by_stage1'])
+        read_contract(self.root/'results/pipeline/evaluation_maha', self.config, 3, kind='pipeline_evaluation')
+        # Exact kNN index is train-only; evaluator routing and ancestry stay identical.
+        from src.knn_distance import LatentKNN
+        knn = LatentKNN.fit(x[fit], 'l2')
+        knn_threshold = threshold_from_known_validation(knn.score_many(x[val], [5], workers=1)[5], .05)
+        knn_dir = self.root/'results/knn_fixture'; knn_dir.mkdir()
+        np.save(knn_dir/'knn_distance_test_scores.npy', knn.score_many(x[test], [5], workers=1)[5])
+        np.save(knn_dir/'test_indices.npy', test)
+        knn_threshold_file = self.root/'knn_threshold.json'
+        save_json(knn_threshold_file, {'method': 'knn_distance', 'threshold': knn_threshold, 'held_out_label_id': 3})
+        write_contract(knn_dir, self.config, 'integration', 3, 'novelty',
+                       parents=[sidecar(s2), p, sidecar(p), knn_threshold_file])
+        run_script('06_evaluate_pipeline.py', ['--run-id', 'evaluation_knn', '--held-out-label-id', '3',
+                   '--p-attack-path', str(p), '--stage2-result-dir', str(s2), '--novelty-method', 'knn_distance',
+                   '--novelty-result-dir', str(knn_dir), '--novelty-threshold-json', str(knn_threshold_file)])
+        knn_report = json.loads((self.root/'results/pipeline/evaluation_knn/metrics.json').read_text(encoding='utf-8'))
+        self.assertEqual(knn_report['stage1_test_metrics'], report['stage1_test_metrics'])
+        self.assertEqual(knn_report['final_unknown_metrics']['unknown_blocked_by_stage1'], report['final_unknown_metrics']['unknown_blocked_by_stage1'])
+        read_contract(self.root/'results/pipeline/evaluation_knn', self.config, 3, kind='pipeline_evaluation')
 
 
 class ExternalAdapters(unittest.TestCase):

@@ -1,0 +1,361 @@
+{
+  "study_id": "novelty_r3_20261027",
+  "study_protocol": "fixed_novelty_multiseed_v1",
+  "artifact_protocol": "revised_v1",
+  "created_utc": "2026-10-27T07:18:52.440792+00:00",
+  "heldouts": [
+    {
+      "heldout": 9,
+      "name": "DoS Hulk",
+      "train_val_test": [
+        110928,
+        23770,
+        23770
+      ]
+    },
+    {
+      "heldout": 25,
+      "name": "Portscan",
+      "train_val_test": [
+        111346,
+        23860,
+        23860
+      ]
+    },
+    {
+      "heldout": 26,
+      "name": "DDoS",
+      "train_val_test": [
+        66600,
+        14272,
+        14272
+      ]
+    }
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "trials": [
+    [
+      9,
+      42,
+      "novelty_r3_20261027_h9_s42"
+    ],
+    [
+      9,
+      43,
+      "novelty_r3_20261027_h9_s43"
+    ],
+    [
+      9,
+      44,
+      "novelty_r3_20261027_h9_s44"
+    ],
+    [
+      25,
+      42,
+      "novelty_r3_20261027_h25_s42"
+    ],
+    [
+      25,
+      43,
+      "novelty_r3_20261027_h25_s43"
+    ],
+    [
+      25,
+      44,
+      "novelty_r3_20261027_h25_s44"
+    ],
+    [
+      26,
+      42,
+      "novelty_r3_20261027_h26_s42"
+    ],
+    [
+      26,
+      43,
+      "novelty_r3_20261027_h26_s43"
+    ],
+    [
+      26,
+      44,
+      "novelty_r3_20261027_h26_s44"
+    ]
+  ],
+  "primary_candidate": "balanced_l2_k1",
+  "baselines": [
+    "max_probability",
+    "mahalanobis"
+  ],
+  "selection": "NONE: same fixed candidate/baselines for every heldout and seed",
+  "primary_gate": "recall: lowest known-validation threshold <=0.5 under benign FPR 0.001",
+  "secondary_gate": "fixed 0.5",
+  "novelty_rejection_target": 0.05,
+  "preprocessing": "fresh train-only scaler + full exact transform replay + immutable hard-link",
+  "preprocessing_storage_sources": {
+    "9": "recall_gate_v1_20261027_h9_s42",
+    "25": "recall_gate_v1_20261027_h25_s42",
+    "26": "recall_gate_v1_20261027_h26_s42"
+  },
+  "training": "fresh AE and nested OOF Stage1 and latent_only XGBoost Stage2 in every trial",
+  "dataset_identity": "6db910704ca10ecc3b3893a8c6f2b899fde07c2b932edd876a8f18d8f550c2e8",
+  "processed_dir": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42",
+  "free_gib_at_plan": 6.570137023925781,
+  "required_gib_estimate": 6.061120359897613,
+  "source_hashes": {
+    "D:\\CAO HOC\\IDS System\\src\\artifact_contracts.py": "b3f25b67d20835d661a6c1d47f3128fa38b693b211cd0fc43cfbe00dba1d94ab",
+    "D:\\CAO HOC\\IDS System\\src\\autoencoder.py": "723bab1a28a78e1c4297d777f3af016a4a362e6be89aa000b922fde0cd1df42b",
+    "D:\\CAO HOC\\IDS System\\src\\calibration.py": "9f9efb4c035e4b8342d7a4ac27967a96c7d59a7604aa1b75c6ade08655703c5d",
+    "D:\\CAO HOC\\IDS System\\src\\config.py": "4853c6660cc95d8ceb1fe04d09e3bb79def627a030ab31552a7c7fab97c8bfae",
+    "D:\\CAO HOC\\IDS System\\src\\console.py": "49d25bc975d6d92acde52e4a9d543b76f233cd810fb13398e03f828f5f53a595",
+    "D:\\CAO HOC\\IDS System\\src\\contracts.py": "c86ece3e30c6df5ad2704909cf64d6b710250ca4a5997e25ce12f66d820c3d51",
+    "D:\\CAO HOC\\IDS System\\src\\data_loader.py": "db98fa06ba526f1211d6ba15e5a8cf56c37613a817c3dc8aa61c5396d6b75aca",
+    "D:\\CAO HOC\\IDS System\\src\\evaluation.py": "e102f4f100c9595d2b59be9ff6562f4d1714058c03ae285f77ae9b67276f9700",
+    "D:\\CAO HOC\\IDS System\\src\\external_data.py": "c2b05e11609fb6f04ec35f27196fa871a0395648912da805582995f6cf2fc95a",
+    "D:\\CAO HOC\\IDS System\\src\\gate_policy.py": "af4acdf986309adbe65fd6a69c7f8e98ce1fe70bf167365274c2cbedf26d5f26",
+    "D:\\CAO HOC\\IDS System\\src\\knn_distance.py": "9737a42d50e9bec624c3ffcf774b19dba80bf44c11ea18a2c2b9643a88f481dc",
+    "D:\\CAO HOC\\IDS System\\src\\labels.py": "b2b63f1ee4136ef6aeb83913857b8f4b4ab1cb5b34a140f0fb7e75edcb8ce9cf",
+    "D:\\CAO HOC\\IDS System\\src\\mahalanobis.py": "bb51da0bca0f2455723953999e211d3647695d63d3fb25f195a9d74d79443652",
+    "D:\\CAO HOC\\IDS System\\src\\metrics.py": "3912e7be700c590c1c71ed62057ddcca877b6b006a8dd71816c814a95bfced1d",
+    "D:\\CAO HOC\\IDS System\\src\\model_config.py": "b28d52269b38438aaef70311bb649133a6a07a10c9b705977426e5e0bd56065f",
+    "D:\\CAO HOC\\IDS System\\src\\model_data.py": "38d6a6dc2bf23679c3b1d920a05812b5b6d1a27f3ec4a5e4639b804e80c57a4c",
+    "D:\\CAO HOC\\IDS System\\src\\novelty.py": "7c3816fb978b4c31062066b54423b2a60c81ae6b17c2121f420fb57fdf1bf4e0",
+    "D:\\CAO HOC\\IDS System\\src\\novelty_benchmark.py": "13a738b9f877b5cde960ee15b3f308dc3e54a09472af3353294a439d0a32fc17",
+    "D:\\CAO HOC\\IDS System\\src\\preprocessing.py": "0423336dbdcf66b73578fba63404001378c519aa04872752cac2f1faae6e339c",
+    "D:\\CAO HOC\\IDS System\\src\\research_protocol.py": "41d72fd7e6b086a175ed475f1d87d56f185cb742efdf85a702b54452d4047f68",
+    "D:\\CAO HOC\\IDS System\\src\\runtime.py": "65263e4de9b6d0d830b7148e46d6ddbe4f621ce4dc97f3249b0d87c8ea40ebf6",
+    "D:\\CAO HOC\\IDS System\\src\\split_data.py": "79214a4c39c27c7a03e79833d0e2bb7c6f04d277d53b7e0b10000ba0e59ff917",
+    "D:\\CAO HOC\\IDS System\\src\\stage1_mlp.py": "af17650b75472101dc4ca21e157e7ff10407b55e5db3815fdb18123bc0f74ed5",
+    "D:\\CAO HOC\\IDS System\\src\\stage1_protocol.py": "32c3d5aff831c93ca931e262db0ec9c6b4123e6c9dad962f16e697368df59eff",
+    "D:\\CAO HOC\\IDS System\\src\\stage1_xgboost.py": "dac0570329f28056a5300c0852ec58933cb5b9fae9cfc428e61365a3415c6a70",
+    "D:\\CAO HOC\\IDS System\\src\\stage2.py": "bdf7bf950ce67b96194c13de0293f031803ee83eb5702e92b65f854d89ff5457",
+    "D:\\CAO HOC\\IDS System\\src\\study_reporting.py": "06e4d86dbac214aabd1b6bfcb05d83c204cf8b0013290eaa660ed5fd40f41b37",
+    "D:\\CAO HOC\\IDS System\\src\\training_utils.py": "5be1fae0ea6f04b4f138de7a78ccad0b8166eb24027e72ac89a6fcbb88cdf389",
+    "D:\\CAO HOC\\IDS System\\src\\utils.py": "234a26d94b66cb2a4c2b8fff51e77f59a995b9b38f82ab05f120d4490ffb6e2a",
+    "D:\\CAO HOC\\IDS System\\src\\__init__.py": "e93db3c0be369318952fd1d2122d310834dafefddfedcc0770489bfd0bd19f94",
+    "D:\\CAO HOC\\IDS System\\scripts\\00_audit_dataset.py": "2152b0922aba93068e0d9588ebe5cc8cc20431439045b1f35368d3e0ff572bcb",
+    "D:\\CAO HOC\\IDS System\\scripts\\01b_prepare_protocol.py": "fc16cdc5be240ae1cc44b3fa928f9530582c8e786f1d2019ee27ff57d9563983",
+    "D:\\CAO HOC\\IDS System\\scripts\\01_prepare_data.py": "52f64f04bd2a42a4f820d0b267e70c801a1fdabd35f54e4a98f1b4a8de3c6793",
+    "D:\\CAO HOC\\IDS System\\scripts\\02_train_autoencoder.py": "dc39fbca35d9cfc888bae5842b2125f6ac0dfa1244242a62137ba15b2c0270e7",
+    "D:\\CAO HOC\\IDS System\\scripts\\03_train_stage1.py": "6432896ea1360ec46b0692cca377b9094be7e248628984834ea2761c3f2da43f",
+    "D:\\CAO HOC\\IDS System\\scripts\\04_train_stage2.py": "a0891c3542661ca198876a3a79546c6fbfb4c96d5eebbd5f5dcd3933fb0fe578",
+    "D:\\CAO HOC\\IDS System\\scripts\\05_train_novelty.py": "4ea01094fe6382008295a6d51fe8d414074a0e432d72592617813772aaf276ff",
+    "D:\\CAO HOC\\IDS System\\scripts\\06_evaluate_pipeline.py": "787a163062b5e93c9a94eb2e3ebed59a387bebb1de9dcafcaaef31d254a56878",
+    "D:\\CAO HOC\\IDS System\\scripts\\07_inspect_external.py": "ca2d09824575507eae7dbf737e31e425a980d0146b44635f7a073fcbd48b4e1d",
+    "D:\\CAO HOC\\IDS System\\scripts\\08_run_research_round.py": "3cfc4c048d37a98df0cbccbacccefc91087b79844daa4d1cb12787ff316c2541",
+    "D:\\CAO HOC\\IDS System\\scripts\\09_run_cse_cic_ids2018.py": "3e34096e2d549585965813ac74b33c5f550d8c77d6f8f45ba87ee6b1ec3e4af4",
+    "D:\\CAO HOC\\IDS System\\scripts\\10_run_cic_unsw_nb15.py": "fd5d4602f20b45b9b33e6c40c1d8e86f6237b81b640539ff7acc3bed6524e111",
+    "D:\\CAO HOC\\IDS System\\scripts\\11_run_loaco_finetuning.py": "463b78ed2cc4f6a0b8b2c577e73cfa6ccd34a0b6090eae9979e0a5d7579b1c48",
+    "D:\\CAO HOC\\IDS System\\scripts\\12_select_gate_threshold.py": "ce13940938ca50c1100f13268f10a0bdaf9063aa0671051785c1bb1695b00623",
+    "D:\\CAO HOC\\IDS System\\scripts\\13_run_recall_gate_study.py": "67ec9a4bee2a88d87727fd8254959497dae5a261855e4969841dd3d84a43500a",
+    "D:\\CAO HOC\\IDS System\\scripts\\14_run_mahalanobis_comparison.py": "1521c47790593837c4a3baa448a6a1a34c26648e2c6c7627abdfc074a2f6daf3",
+    "D:\\CAO HOC\\IDS System\\scripts\\15_run_knn_distance_study.py": "41d42066d45b40071e36c4b7797863402acb90647d72659a76daacc71230543c",
+    "D:\\CAO HOC\\IDS System\\scripts\\16_run_confirmatory_study.py": "5c146360a8e30c4b92436e5fae425293facfca929828bf604968651ca515cda9",
+    "D:\\CAO HOC\\IDS System\\scripts\\check_cse_cic_2018.py": "d2a934db724cbaa9db0a78a108dd5189f815a0390d22fe73e90a8c453135adee",
+    "D:\\CAO HOC\\IDS System\\scripts\\inspect_cic_unsw.py": "8c20724b274e285cbf7537b8393fc81687f2fb9a71f7aa388b2238b4983608df",
+    "D:\\CAO HOC\\IDS System\\scripts\\maintenance_archive_old_runs.py": "324f761fffdfa434734691efbe51a4060a3eb57b1a3bfbdb7d37bb1592e7c3b1",
+    "D:\\CAO HOC\\IDS System\\scripts\\verify_environment.py": "5ecf161d78784ef0bec05e5e5f1ca0a75203e561491a422314d41e66ff1d60cb",
+    "D:\\CAO HOC\\IDS System\\tests\\test_data_loader.py": "3139705913642c6cfd568a6d08c7acebf2b2cda58f7626600a75d0bcfc6cc310",
+    "D:\\CAO HOC\\IDS System\\tests\\test_gate_policy.py": "2305b1ae29d3acfad1366b86ba0c38dbee3824ec3f75031290b0cea112239fd8",
+    "D:\\CAO HOC\\IDS System\\tests\\test_knn_distance.py": "42f7a9b11be277d0a8dca9a2efb8f169f60d565496c415a9f12ed5febd637de1",
+    "D:\\CAO HOC\\IDS System\\tests\\test_labels.py": "6eb7d9f1a4692ba299547c273751d5a7cc44544defa7c5c0eb0974c55de33781",
+    "D:\\CAO HOC\\IDS System\\tests\\test_mahalanobis.py": "e678e5bfeb34d7ffef9e704b18378f2eab4d7faf3e540b90cc1dece16149548a",
+    "D:\\CAO HOC\\IDS System\\tests\\test_model_config.py": "b7c7cf20ba4204e7160116e9698550c76dc8b940aa24582ceebaa87655556b9b",
+    "D:\\CAO HOC\\IDS System\\tests\\test_novelty_benchmark.py": "3afc4f0ed75a67770e49a4e483c6cc89daaa56c91dbcab3a859a2da12c7c0be4",
+    "D:\\CAO HOC\\IDS System\\tests\\test_preprocessing.py": "853511785105f81cd90a672ab7c69cd7d8a247cc7e8bae9aabdb32869e77341b",
+    "D:\\CAO HOC\\IDS System\\tests\\test_requirements.py": "2efcdc8cef4cc0e3ae0403f253e4e7db74ed8576f99dcabbb423bd73027cf27c",
+    "D:\\CAO HOC\\IDS System\\tests\\test_research_alignment.py": "9d0a997f0ff5c898376d35b08f6819a7a26bf328554605823fbe71c6f761ae5d",
+    "D:\\CAO HOC\\IDS System\\tests\\test_research_round.py": "a5d044e0f40c018d4e71e3caf2009672222fb382bfbbe20fe89edaa1ff2c3700",
+    "D:\\CAO HOC\\IDS System\\tests\\test_split_data.py": "ce4eccc203a36007ae9fc1f3f215f5aeae70b519c0820a8ef7e907ea8147298d",
+    "D:\\CAO HOC\\IDS System\\tests\\test_training_contracts.py": "27080989b818d02972e8b582619417c2db44c26dc8b8c794e742557dee176593"
+  },
+  "input_hashes": {
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\features_raw.npy": "9e2a87e644fe8f5e50dd304b41e08097ec9848dc8d8aad00b80d217eb92ca4bd",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\features_scaled.npy": "43936f55e4c896b6703bdb7a9a3716d2966bf0d8a81db8aae049fb23f2f674ca",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\row_hashes.npy": "c23aa0cedf212789f3243287c942c927bed9e34942655cd902276bd92c56d740",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\split_ids.npy": "61e0bc130c3380030dddd107dba6efaf0922550c1bfe99f391a97db287e9fc82",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\binary_labels.npy": "747de1cfae813e451ae593c04623283ca8c7e8d337cfe423914c58b9e36d54a6",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\attack_label_ids.npy": "44630dadb78a12ca8ef95f285aedcf5e6e7c0bd6fb3d57b218cd86f56e382416",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata\\cleaning_report.json": "483d4cc3712e1160a934a69b1e3be81e54eb87d1458c0ccea211abe489a5b960",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata\\feature_names.json": "71b9208344619a90507a8569c37eb1ad9030b4cbb18445f848890f6e5cd40d57",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata\\label_mapping.json": "17047b5fad0b958bab06d96c6bb685cf160b2acc0fa3c419ce2d0c80a00b7f30",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata\\source_mapping.json": "05385eded00d941631df5d8ce682e837130e818d38a9198054c5f15d678d3a3f",
+    "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata\\split_config.json": "6b340d258415d728e941de15b6a69f92c7c81605ce0c50337186161d4962fdfc"
+  },
+  "historical_evidence_hashes": {
+    "D:\\CAO HOC\\IDS System\\results\\recall_gate_studies\\recall_gate_v1_20261027\\comparison.json": "ef79cd5aeb20551e7fbe0bf6eac2265c34d4dfd6182ea785bdfac12bc0d643c0",
+    "D:\\CAO HOC\\IDS System\\results\\mahalanobis_studies\\mahalanobis_v1\\comparison.json": "57eda0ff607033c5e7ebce73a59f517be41f3290e41721498ddb2b60a4661aee",
+    "D:\\CAO HOC\\IDS System\\results\\knn_studies\\knn_v1\\comparison.json": "3f7e7668f40bc36bebc113ab37eb91eaa23c369d81978c1befe84e6528b68ebd",
+    "D:\\CAO HOC\\IDS System\\artifacts\\metadata\\raw_manifest.json": "fd7f06160de54716f0637b3042d006b76be8c6429d7a8f3eb838c1ee1e7fde4a"
+  },
+  "input_config_hashes": {
+    "D:\\CAO HOC\\IDS System\\configs\\model_config_round2_20261027_fp32_s42.json": "391b597b57f61d1ff3c563c952457581512304f1aa013802ba8b1e4b638f1f75",
+    "D:\\CAO HOC\\IDS System\\configs\\base_round2_20261027_fp32_s42.json": "6d9ca57e5222c9b932ab1a7f1534c6749bd9168698fc439f82cfea7b3a1821bc"
+  },
+  "input_config": {
+    "experiment": {
+      "id": "round2_20261027_fp32_s42_main",
+      "random_state": 42,
+      "base_data_config": "D:\\CAO HOC\\IDS System\\configs\\base_round2_20261027_fp32_s42.json",
+      "processed_dir": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42",
+      "models_dir": "models",
+      "results_dir": "results",
+      "metadata_dir": "artifacts/metadata",
+      "prepared_metadata_dir": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata"
+    },
+    "hardware": {
+      "device": "cuda:0",
+      "require_cuda": true,
+      "expected_gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+      "expected_vram_mib": 4096,
+      "expected_system_ram_gib": 16,
+      "logical_processors": 12,
+      "detected_driver": "610.62",
+      "driver_max_cuda": "13.3",
+      "pytorch_version": "2.13.0",
+      "pytorch_cuda_wheel": "cu130",
+      "mixed_precision": true,
+      "amp_dtype": "float16",
+      "allow_tf32": true,
+      "deterministic_algorithms": false,
+      "cudnn_benchmark": true,
+      "pin_memory": true,
+      "num_workers": 0
+    },
+    "autoencoder": {
+      "hidden_dims": [
+        64,
+        32
+      ],
+      "latent_dim": 16,
+      "batch_size": 8192,
+      "epochs": 100,
+      "learning_rate": 0.001,
+      "weight_decay": 1e-05,
+      "early_stopping_patience": 12,
+      "min_delta": 1e-06,
+      "gradient_clip_norm": 5.0,
+      "encode_batch_size": 16384
+    },
+    "stage1": {
+      "oof_folds": 5,
+      "calibrate_probabilities": true,
+      "xgboost": {
+        "n_estimators": 1500,
+        "learning_rate": 0.05,
+        "max_depth": 8,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_alpha": 0.1,
+        "reg_lambda": 5.0,
+        "max_bin": 128,
+        "tree_method": "hist",
+        "device": "cuda:0",
+        "eval_metric": [
+          "logloss",
+          "aucpr"
+        ],
+        "early_stopping_rounds": 75
+      },
+      "mlp": {
+        "hidden_dims": [
+          32,
+          16
+        ],
+        "dropout": 0.2,
+        "batch_size": 8192,
+        "epochs": 100,
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "early_stopping_patience": 12,
+        "reduce_lr_patience": 4,
+        "reduce_lr_factor": 0.5,
+        "gradient_clip_norm": 5.0
+      }
+    },
+    "stage2": {
+      "model": "xgboost",
+      "experiments": [
+        "latent_only",
+        "latent_plus_pattack_xgb",
+        "latent_plus_pattack_mlp"
+      ],
+      "xgboost": {
+        "n_estimators": 1500,
+        "learning_rate": 0.05,
+        "max_depth": 8,
+        "min_child_weight": 3,
+        "subsample": 0.8,
+        "colsample_bytree": 0.9,
+        "reg_alpha": 0.1,
+        "reg_lambda": 5.0,
+        "max_bin": 128,
+        "tree_method": "hist",
+        "device": "cuda:0",
+        "eval_metric": [
+          "mlogloss",
+          "merror"
+        ],
+        "early_stopping_rounds": 75
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "dropout": 0.25,
+        "batch_size": 8192,
+        "epochs": 100,
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "early_stopping_patience": 12,
+        "reduce_lr_patience": 4,
+        "reduce_lr_factor": 0.5,
+        "gradient_clip_norm": 5.0
+      }
+    },
+    "novelty": {
+      "protocol": "leave_one_attack_class_out",
+      "minimum_held_out_samples": 500,
+      "known_rejection_rate": 0.05,
+      "max_probability": {
+        "enabled": true
+      },
+      "one_class_svm": {
+        "enabled": true,
+        "nu": 0.05,
+        "kernel": "rbf",
+        "gamma": "scale",
+        "max_training_samples": 20000
+      },
+      "isolation_forest": {
+        "enabled": true,
+        "n_estimators": 300,
+        "max_samples": 100000,
+        "contamination": "auto",
+        "n_jobs": -1
+      }
+    },
+    "evaluation": {
+      "decision_threshold": 0.5,
+      "save_predictions": true,
+      "save_probabilities": true,
+      "bootstrap_iterations": 1000,
+      "bootstrap_seed": 42
+    }
+  },
+  "limitations": [
+    "candidate motivated by historical test: exploratory method-development evidence",
+    "same fixed stratified split; seed varies fitting AND kNN reference, not split",
+    "repeated seeds are not new independent test rows; no significance/superiority claim",
+    "known validation reused for upstream stopping and novelty calibration",
+    "feature-vector overlap remains; raw release provenance unverified; Attempted preserved",
+    "no external dataset, chronological split or real-world zero-day confirmation",
+    "unknown=-1, never recover the unseen attack semantic name",
+    "known-validation recall gate cannot guarantee unknown retention",
+    "CUDA training not guaranteed bitwise deterministic"
+  ]
+}

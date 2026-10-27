@@ -1,0 +1,48 @@
+{
+  "cicunsw_zero_day_v2_main": {
+    "heldout_id": null,
+    "fit_samples": 214323,
+    "fit_indices_sha256": "7376659b3645387ace9abad2bbbb51970211b8112130a9a2c418d275ad26497f",
+    "scaler_sha256": "d70b31a8e208e8c1fa9cc90e798e9fa40acbd69526b9f5f6f58221bbdc36cd4b",
+    "scaled_shape": [
+      306173,
+      76
+    ],
+    "constant_train_features": [
+      "Bwd PSH Flags",
+      "Fwd URG Flags",
+      "Bwd URG Flags",
+      "URG Flag Count",
+      "CWR Flag Count",
+      "ECE Flag Count",
+      "Fwd Bytes/Bulk Avg",
+      "Fwd Packet/Bulk Avg",
+      "Fwd Bulk Rate Avg"
+    ],
+    "known_train_scope_verified": true,
+    "test_used_for_fit": false
+  },
+  "cicunsw_zero_day_v2_loaco_3": {
+    "heldout_id": 3,
+    "fit_samples": 211235,
+    "fit_indices_sha256": "442df1a43c56332669e019dc136a9c44e0b6951d73be63ddadb23c8da7c90573",
+    "scaler_sha256": "97c9baff17d644002096e01acad355b94a4dbfc5bc6d0c6043ecf72ea60f8670",
+    "scaled_shape": [
+      306173,
+      76
+    ],
+    "constant_train_features": [
+      "Bwd PSH Flags",
+      "Fwd URG Flags",
+      "Bwd URG Flags",
+      "URG Flag Count",
+      "CWR Flag Count",
+      "ECE Flag Count",
+      "Fwd Bytes/Bulk Avg",
+      "Fwd Packet/Bulk Avg",
+      "Fwd Bulk Rate Avg"
+    ],
+    "known_train_scope_verified": true,
+    "test_used_for_fit": false
+  }
+}

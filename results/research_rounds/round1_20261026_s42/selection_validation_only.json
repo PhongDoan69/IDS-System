@@ -1,0 +1,13 @@
+{
+  "selected": "latent_plus_pattack_xgb",
+  "selected_utc": "2026-10-26T09:34:28.528290+00:00",
+  "criterion": "max validation macro_f1; ties use declared variant order",
+  "gate_fixed": "xgboost_latent",
+  "validation_macro_f1": {
+    "latent_only": 0.8917452689884822,
+    "latent_plus_pattack_xgb": 0.8921702945454668,
+    "latent_only_mlp": 0.7423600878325065,
+    "latent_plus_pattack_mlp": 0.630566502313899
+  },
+  "test_used_for_selection": false
+}

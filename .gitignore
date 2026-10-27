@@ -20,8 +20,22 @@ artifacts/thresholds/*
 !artifacts/preprocessors/.gitkeep
 !artifacts/thresholds/.gitkeep
 
-# Giữ JSON/CSV metric nhỏ; bỏ xác suất, novelty score và prediction cỡ lớn.
-results/**/*.npy
-results/**/*.csv.gz
+# Publish textual experiment evidence for comparison; keep runtime binaries local.
+# Unignore directories so the extension allowlist also works for nested studies.
+/results/**/*
+!/results/**/
+!/results/**/*.json
+!/results/**/*.csv
+!/results/**/*.md
+!/results/**/.gitkeep
+
+# Generated training metadata remains local; stable dataset schema/manifest above
+# these phase folders may stay versioned. Existing tracked files are unaffected.
+/artifacts/metadata/autoencoder/
+/artifacts/metadata/stage1/
+/artifacts/metadata/stage2/
+/artifacts/metadata/novelty/
+/artifacts/external_training.lock
 
 /data/external/
+/CSE-CIC-IDS2018/

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -69,6 +70,31 @@ class TrainingHistory:
         }
 
 
+def _replace_atomic_with_retry(temporary: Path, path: Path) -> None:
+    """Retry only Windows access/sharing/lock errors during atomic replacement.
+
+    Checkpoint readers/indexers can briefly hold a Windows file handle. Retry the
+    already-written temporary file, never delete the previous good checkpoint or
+    fall back to a non-atomic write. A persistent ACL/lock failure still raises
+    after eight attempts (at most 4.5 seconds of backoff); keep both files for
+    diagnosis. This changes I/O robustness, not training/selection semantics.
+    """
+    for attempt in range(8):
+        try:
+            temporary.replace(path)
+            return
+        except OSError as error:
+            if getattr(error, "winerror", None) not in {5, 32, 33} or attempt == 7:
+                raise
+            if attempt == 0:
+                logging.getLogger(__name__).warning(
+                    "Windows temporarily denied atomic replace of %s (winerror=%s); "
+                    "retrying without deleting the previous artifact.",
+                    path, error.winerror,
+                )
+            time.sleep(min(0.1 * (2 ** attempt), 1.0))
+
+
 def save_torch_checkpoint(
     path: Path,
     model,
@@ -81,17 +107,20 @@ def save_torch_checkpoint(
 
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    torch.save(
-        {
-            "model_state_dict": model.state_dict(),
-            "optimizer_state_dict": optimizer.state_dict(),
-            "epoch": int(epoch),
-            "validation_loss": float(validation_loss),
-            "metadata": metadata,
-        },
-        temporary,
-    )
-    temporary.replace(path)
+    # Close our own writer before replacement; Windows does not permit replacing
+    # a file while a conflicting handle remains open.
+    with temporary.open("wb") as stream:
+        torch.save(
+            {
+                "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "epoch": int(epoch),
+                "validation_loss": float(validation_loss),
+                "metadata": metadata,
+            },
+            stream,
+        )
+    _replace_atomic_with_retry(temporary, path)
 
 
 def save_json(path: Path, value: Any) -> None:
@@ -100,7 +129,7 @@ def save_json(path: Path, value: Any) -> None:
     with temporary.open("w", encoding="utf-8") as stream:
         json.dump(value, stream, ensure_ascii=False, indent=2, default=_json_default)
         stream.write("\n")
-    temporary.replace(path)
+    _replace_atomic_with_retry(temporary, path)
 
 
 def _json_default(value: Any):

@@ -1,0 +1,11 @@
+{
+  "primary_frozen_from_CICIDS2017": "latent_plus_pattack_xgb",
+  "secondary_external_validation_winner": "latent_plus_pattack_xgb",
+  "validation_macro_f1": {
+    "latent_only": 0.4499504608999506,
+    "latent_plus_pattack_xgb": 0.46981676642605674,
+    "latent_only_mlp": 0.28774116011731504,
+    "latent_plus_pattack_mlp": 0.29672929385914926
+  },
+  "test_used_for_selection": false
+}

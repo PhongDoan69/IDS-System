@@ -1,0 +1,43 @@
+{
+  "source_run": "recall_gate_v1_20261027_h26_s42",
+  "held_out": 26,
+  "upstream_retrained": false,
+  "policy": "natural",
+  "normalization": "l2",
+  "reference_size": 50000,
+  "reference_seed": 42,
+  "reference_class_counts": {
+    "1": 0,
+    "2": 487,
+    "3": 351,
+    "4": 3,
+    "5": 458,
+    "6": 231,
+    "7": 206,
+    "8": 413,
+    "9": 18863,
+    "10": 76,
+    "11": 931,
+    "12": 1,
+    "13": 9,
+    "14": 151,
+    "15": 8,
+    "16": 12,
+    "17": 3,
+    "18": 8227,
+    "19": 77,
+    "20": 2,
+    "21": 0,
+    "22": 3,
+    "23": 517,
+    "24": 95,
+    "25": 18876
+  },
+  "known_classes_missing_from_reference": [
+    "1",
+    "21"
+  ],
+  "zero_reference_vectors": 0,
+  "index_and_query_seconds": 36.09321130000171,
+  "test_used_for_fit_or_threshold": false
+}

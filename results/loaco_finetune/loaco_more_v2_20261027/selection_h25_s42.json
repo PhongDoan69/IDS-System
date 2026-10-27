@@ -1,0 +1,38 @@
+{
+  "held_out": 25,
+  "seed": 42,
+  "criterion": "within each (held-out, seed), highest Stage2 known-validation macro-F1; ties Stage1 validation F1 then profile order",
+  "test_used_for_selection": false,
+  "candidates": [
+    {
+      "run_id": "loaco_more_v2_20261027_h25_s42_baseline",
+      "held_out": 25,
+      "seed": 42,
+      "profile": "baseline",
+      "config": "D:\\CAO HOC\\IDS System\\configs\\loaco_finetune_loaco_more_v2_20261027_h25_s42_baseline.json",
+      "config_sha256": "ff6c785e8f28081d0d4b36d56b0cc684d012a991cf2fcf7add6eca3562698965",
+      "stage1_validation_f1": 0.9988366201940218,
+      "stage2_validation_macro_f1": 0.8927783342845657
+    },
+    {
+      "run_id": "loaco_more_v2_20261027_h25_s42_regularized",
+      "held_out": 25,
+      "seed": 42,
+      "profile": "regularized",
+      "config": "D:\\CAO HOC\\IDS System\\configs\\loaco_finetune_loaco_more_v2_20261027_h25_s42_regularized.json",
+      "config_sha256": "ad475e5db08a1c6f9027ca2d571581f3ab4576b8f66eff51619bd36ff8ba1216",
+      "stage1_validation_f1": 0.9987333577279253,
+      "stage2_validation_macro_f1": 0.8924023499595372
+    }
+  ],
+  "selected": {
+    "run_id": "loaco_more_v2_20261027_h25_s42_baseline",
+    "held_out": 25,
+    "seed": 42,
+    "profile": "baseline",
+    "config": "D:\\CAO HOC\\IDS System\\configs\\loaco_finetune_loaco_more_v2_20261027_h25_s42_baseline.json",
+    "config_sha256": "ff6c785e8f28081d0d4b36d56b0cc684d012a991cf2fcf7add6eca3562698965",
+    "stage1_validation_f1": 0.9988366201940218,
+    "stage2_validation_macro_f1": 0.8927783342845657
+  }
+}

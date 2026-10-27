@@ -1,5 +1,11 @@
 # Hướng dẫn huấn luyện pipeline IDS
 
+> **Đợt mới 27/10/2026:** dùng [NOVELTY_MULTISEED_TRAINING_GUIDE.md](research_alignment/NOVELTY_MULTISEED_TRAINING_GUIDE.md)
+> và `scripts/16_run_confirmatory_study.py` cho 3 held-out × 3 seed, huấn luyện mới
+> AE/Stage 1/Stage 2 rồi so sánh kNN balanced–L2–k1, MCP, Mahalanobis cùng upstream.
+> Giữ nguyên kết quả cũ. Kiểm `status.json` trước khi chạy để tránh runner trùng.
+> Test lịch sử đã xem; nhiều seed không thay thế kiểm chứng trên split/dataset độc lập.
+
 > HƯỚNG DẪN LỊCH SỬ — Cập nhật chỉ dẫn ngày 26/10/2026:
 > source mới yêu cầu `--protocol revised_v1`, preprocessing per-run và lineage mới.
 > Dùng [PIPELINE_REPRODUCTION_GUIDE.md](research_alignment/PIPELINE_REPRODUCTION_GUIDE.md)

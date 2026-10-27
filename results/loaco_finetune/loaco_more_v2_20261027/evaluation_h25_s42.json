@@ -1,0 +1,53 @@
+{
+  "held_out": 25,
+  "seed": 42,
+  "selected_profile": "baseline",
+  "run_id": "loaco_more_v2_20261027_h25_s42_baseline",
+  "validation_stage2_macro_f1": 0.8927783342845657,
+  "final_unknown_metrics": {
+    "population": "all_test_including_benign; final prediction after gate",
+    "unknown_support": 23860,
+    "known_attack_support": 53281,
+    "precision": 0.7334152334152334,
+    "recall": 0.3002514668901928,
+    "f1": 0.42607351017009637,
+    "unknown_detected": 7164,
+    "unknown_blocked_by_stage1": 768,
+    "benign_rejected_unknown": 46,
+    "known_attack_false_rejection_rate": 0.048009609429252455
+  },
+  "stage1_test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9971639413584467,
+    "balanced_accuracy": 0.99449839917861,
+    "precision": 0.9991620514029093,
+    "recall_detection_rate": 0.9892664082653841,
+    "f1": 0.9941896064305162,
+    "false_positive_rate": 0.00026960990816412504,
+    "false_negative_rate": 0.010733591734615834,
+    "roc_auc": 0.9995464620908593,
+    "average_precision": 0.9991823741565563,
+    "pr_auc": 0.9991823741565563,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 314521,
+    "brier_score": 0.002611601958051324,
+    "confusion_matrix": [
+      [
+        237316,
+        64
+      ],
+      [
+        828,
+        76313
+      ]
+    ]
+  },
+  "end_to_end_macro_f1": 0.7432828127216724,
+  "error_decomposition": {
+    "benign_passed_gate": 64,
+    "attack_blocked_gate": 828,
+    "passed_attack_wrong_final": 18489,
+    "total_errors": 19381
+  },
+  "metrics_path": "D:\\CAO HOC\\IDS System\\results\\pipeline\\loaco_more_v2_20261027_h25_s42_baseline_open_mcp\\metrics.json"
+}

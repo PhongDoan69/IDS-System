@@ -30,9 +30,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--stage2-result-dir", required=True)
     parser.add_argument("--held-out-label-id", type=int, default=None)
     parser.add_argument("--novelty-result-dir", default=None)
-    parser.add_argument("--novelty-method", choices=["max_probability", "one_class_svm", "isolation_forest"])
+    parser.add_argument("--novelty-method", choices=["max_probability", "one_class_svm", "isolation_forest", "mahalanobis", "knn_distance"])
     parser.add_argument("--novelty-threshold-json", default=None)
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument('--stage1-threshold-json', help='Optional known-validation gate policy; leaves historical fixed-gate runs unchanged')
     parser.add_argument('--allow-legacy-artifacts', action='store_true',
                         help='Chỉ replay artifact cũ; không xác nhận strict OOF/LOACO hoặc lineage')
     return parser.parse_args()
@@ -57,6 +58,24 @@ def main() -> None:
     arrays = load_prepared_arrays(processed_dir)
     validate_held_out_label(arrays.attack_label_ids, args.held_out_label_id)
     p_attack = np.load(Path(args.p_attack_path).resolve(), mmap_mode="r")
+    gate_record = None
+    if args.stage1_threshold_json:
+        from src.artifact_contracts import sha256
+        from src.gate_policy import select_gate
+        gate_record = json.loads(Path(args.stage1_threshold_json).read_text(encoding='utf-8'))
+        p_record_gate = read_contract(Path(args.p_attack_path), config, args.held_out_label_id, kind='p_attack')
+        if (gate_record.get('run_id') != p_record_gate['run_id']
+                or gate_record.get('held_out_label_id') != args.held_out_label_id
+                or gate_record.get('p_attack_path') != str(Path(args.p_attack_path).resolve())
+                or gate_record.get('p_attack_sha256') != sha256(Path(args.p_attack_path))
+                or gate_record.get('selected_on') != 'known_validation_only'
+                or gate_record.get('test_used_for_selection') is not False):
+            raise ValueError('Gate threshold provenance mismatch')
+        known_val = np.flatnonzero((arrays.split_ids == 1) & (arrays.attack_label_ids != args.held_out_label_id))
+        replay = select_gate(p_attack[known_val], arrays.binary_labels[known_val], gate_record['benign_fpr_budget'])
+        if replay['threshold'] != gate_record['threshold']:
+            raise ValueError('Gate threshold does not reproduce from known validation')
+        config['evaluation']['decision_threshold'] = float(gate_record['threshold'])
     stage2_dir = Path(args.stage2_result_dir).resolve()
     test_indices = np.load(stage2_dir / "test_indices.npy")
     stage2_probabilities = np.load(stage2_dir / "test_probabilities.npy", mmap_mode="r")
@@ -143,7 +162,7 @@ def main() -> None:
                                float(config['evaluation']['decision_threshold']), args.held_out_label_id),
         'composition_seconds_only_NOT_model_inference': composition_seconds,
         'model_inference_performance': 'NOT MEASURED; precomputed scores, not raw-to-model latency',
-        'stage1_threshold_selection': 'fixed_config; NOT validation-optimized',
+        'stage1_threshold_selection': gate_record or 'fixed_config; NOT validation-optimized',
         "accuracy_bootstrap_95ci": _bootstrap_accuracy_interval(
             predictions == evaluation_truth,
             int(config["evaluation"]["bootstrap_iterations"]),
@@ -164,6 +183,12 @@ def main() -> None:
     output_dir = phase_directory(config, "results_dir", "pipeline", run_id)
     output_dir.mkdir(parents=True, exist_ok=True)
     save_json(output_dir / "metrics.json", report)
+    if config['evaluation'].get('save_compact_predictions', False):
+        # Integer predictions + aligned indices are sufficient for error audit.
+        # Scores remain in their hashed upstream artifacts, not duplicated as CSV.
+        np.savez_compressed(output_dir / 'predictions.npz', test_indices=test_indices,
+                            true_label_id=truth, evaluation_label_id=evaluation_truth,
+                            predicted_label_id=predictions)
     if config["evaluation"].get("save_predictions", True):
         frame = pd.DataFrame({
             "row_hash": np.asarray(arrays.row_hashes[test_indices]),
@@ -180,6 +205,8 @@ def main() -> None:
         parents = [Path(args.p_attack_path), sidecar(Path(args.p_attack_path)), sidecar(stage2_dir)]
         if args.novelty_method:
             parents.extend([sidecar(Path(args.novelty_result_dir)), Path(args.novelty_threshold_json)])
+        if args.stage1_threshold_json:
+            parents.append(Path(args.stage1_threshold_json))
         write_contract(output_dir, config, run_id, args.held_out_label_id, 'pipeline_evaluation', parents=parents, extra=plan)
     print(f"Đã lưu báo cáo end-to-end: {output_dir}")
 

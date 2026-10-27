@@ -1,0 +1,420 @@
+{
+  "protocol": "revised_v1",
+  "status": "completed",
+  "kind": "pipeline_evaluation",
+  "created_utc": "2026-10-27T06:31:42.824281+00:00",
+  "run_id": "knn_v1_h9_balanced_none_k1_recall",
+  "held_out_label_id": 9,
+  "artifact_path": "D:\\CAO HOC\\IDS System\\results\\pipeline\\knn_v1_h9_balanced_none_k1_recall",
+  "dataset_identity": "6db910704ca10ecc3b3893a8c6f2b899fde07c2b932edd876a8f18d8f550c2e8",
+  "dataset_name": "CICIDS2017 local daily CSV; upstream release UNVERIFIED",
+  "config": {
+    "experiment": {
+      "id": "recall_gate_v1_20261027_h9_s42",
+      "random_state": 42,
+      "base_data_config": "D:\\CAO HOC\\IDS System\\configs\\base_round2_20261027_fp32_s42.json",
+      "processed_dir": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42",
+      "models_dir": "models",
+      "results_dir": "results",
+      "metadata_dir": "artifacts/metadata",
+      "prepared_metadata_dir": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\metadata"
+    },
+    "hardware": {
+      "device": "cuda:0",
+      "require_cuda": true,
+      "expected_gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+      "expected_vram_mib": 4096,
+      "expected_system_ram_gib": 16,
+      "logical_processors": 12,
+      "detected_driver": "610.62",
+      "driver_max_cuda": "13.3",
+      "pytorch_version": "2.13.0",
+      "pytorch_cuda_wheel": "cu130",
+      "mixed_precision": true,
+      "amp_dtype": "float16",
+      "allow_tf32": true,
+      "deterministic_algorithms": false,
+      "cudnn_benchmark": true,
+      "pin_memory": true,
+      "num_workers": 0
+    },
+    "autoencoder": {
+      "hidden_dims": [
+        64,
+        32
+      ],
+      "latent_dim": 16,
+      "batch_size": 8192,
+      "epochs": 100,
+      "learning_rate": 0.001,
+      "weight_decay": 1e-05,
+      "early_stopping_patience": 12,
+      "min_delta": 1e-06,
+      "gradient_clip_norm": 5.0,
+      "encode_batch_size": 16384
+    },
+    "stage1": {
+      "oof_folds": 5,
+      "calibrate_probabilities": true,
+      "xgboost": {
+        "n_estimators": 1500,
+        "learning_rate": 0.05,
+        "max_depth": 8,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_alpha": 0.1,
+        "reg_lambda": 5.0,
+        "max_bin": 128,
+        "tree_method": "hist",
+        "device": "cuda:0",
+        "eval_metric": [
+          "logloss",
+          "aucpr"
+        ],
+        "early_stopping_rounds": 75
+      },
+      "mlp": {
+        "hidden_dims": [
+          32,
+          16
+        ],
+        "dropout": 0.2,
+        "batch_size": 8192,
+        "epochs": 100,
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "early_stopping_patience": 12,
+        "reduce_lr_patience": 4,
+        "reduce_lr_factor": 0.5,
+        "gradient_clip_norm": 5.0
+      }
+    },
+    "stage2": {
+      "model": "xgboost",
+      "experiments": [
+        "latent_only",
+        "latent_plus_pattack_xgb",
+        "latent_plus_pattack_mlp"
+      ],
+      "xgboost": {
+        "n_estimators": 1500,
+        "learning_rate": 0.05,
+        "max_depth": 8,
+        "min_child_weight": 3,
+        "subsample": 0.8,
+        "colsample_bytree": 0.9,
+        "reg_alpha": 0.1,
+        "reg_lambda": 5.0,
+        "max_bin": 128,
+        "tree_method": "hist",
+        "device": "cuda:0",
+        "eval_metric": [
+          "mlogloss",
+          "merror"
+        ],
+        "early_stopping_rounds": 75
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "dropout": 0.25,
+        "batch_size": 8192,
+        "epochs": 100,
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "early_stopping_patience": 12,
+        "reduce_lr_patience": 4,
+        "reduce_lr_factor": 0.5,
+        "gradient_clip_norm": 5.0
+      }
+    },
+    "novelty": {
+      "protocol": "leave_one_attack_class_out",
+      "minimum_held_out_samples": 500,
+      "known_rejection_rate": 0.05,
+      "max_probability": {
+        "enabled": true
+      },
+      "one_class_svm": {
+        "enabled": true,
+        "nu": 0.05,
+        "kernel": "rbf",
+        "gamma": "scale",
+        "max_training_samples": 20000
+      },
+      "isolation_forest": {
+        "enabled": true,
+        "n_estimators": 300,
+        "max_samples": 100000,
+        "contamination": "auto",
+        "n_jobs": -1
+      }
+    },
+    "evaluation": {
+      "decision_threshold": 0.04365862160921097,
+      "save_predictions": true,
+      "save_probabilities": true,
+      "bootstrap_iterations": 1000,
+      "bootstrap_seed": 42
+    },
+    "_config_path": "D:\\CAO HOC\\IDS System\\configs\\recall_gate_v1_20261027_h9_s42.json",
+    "_project_root": "D:\\CAO HOC\\IDS System"
+  },
+  "python": "3.10.7",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.7.2",
+    "torch": "2.13.0+cu130",
+    "xgboost": "3.2.0",
+    "joblib": "1.5.3"
+  },
+  "source_files": [
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\__init__.py",
+      "sha256": "e93db3c0be369318952fd1d2122d310834dafefddfedcc0770489bfd0bd19f94"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\artifact_contracts.py",
+      "sha256": "b3f25b67d20835d661a6c1d47f3128fa38b693b211cd0fc43cfbe00dba1d94ab"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\autoencoder.py",
+      "sha256": "723bab1a28a78e1c4297d777f3af016a4a362e6be89aa000b922fde0cd1df42b"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\calibration.py",
+      "sha256": "9f9efb4c035e4b8342d7a4ac27967a96c7d59a7604aa1b75c6ade08655703c5d"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\config.py",
+      "sha256": "4853c6660cc95d8ceb1fe04d09e3bb79def627a030ab31552a7c7fab97c8bfae"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\console.py",
+      "sha256": "49d25bc975d6d92acde52e4a9d543b76f233cd810fb13398e03f828f5f53a595"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\contracts.py",
+      "sha256": "c86ece3e30c6df5ad2704909cf64d6b710250ca4a5997e25ce12f66d820c3d51"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\data_loader.py",
+      "sha256": "db98fa06ba526f1211d6ba15e5a8cf56c37613a817c3dc8aa61c5396d6b75aca"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\evaluation.py",
+      "sha256": "e102f4f100c9595d2b59be9ff6562f4d1714058c03ae285f77ae9b67276f9700"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\external_data.py",
+      "sha256": "c2b05e11609fb6f04ec35f27196fa871a0395648912da805582995f6cf2fc95a"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\gate_policy.py",
+      "sha256": "af4acdf986309adbe65fd6a69c7f8e98ce1fe70bf167365274c2cbedf26d5f26"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\knn_distance.py",
+      "sha256": "9737a42d50e9bec624c3ffcf774b19dba80bf44c11ea18a2c2b9643a88f481dc"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\labels.py",
+      "sha256": "b2b63f1ee4136ef6aeb83913857b8f4b4ab1cb5b34a140f0fb7e75edcb8ce9cf"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\mahalanobis.py",
+      "sha256": "bb51da0bca0f2455723953999e211d3647695d63d3fb25f195a9d74d79443652"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\metrics.py",
+      "sha256": "3912e7be700c590c1c71ed62057ddcca877b6b006a8dd71816c814a95bfced1d"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\model_config.py",
+      "sha256": "b28d52269b38438aaef70311bb649133a6a07a10c9b705977426e5e0bd56065f"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\model_data.py",
+      "sha256": "38d6a6dc2bf23679c3b1d920a05812b5b6d1a27f3ec4a5e4639b804e80c57a4c"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\novelty.py",
+      "sha256": "7c3816fb978b4c31062066b54423b2a60c81ae6b17c2121f420fb57fdf1bf4e0"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\preprocessing.py",
+      "sha256": "0423336dbdcf66b73578fba63404001378c519aa04872752cac2f1faae6e339c"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\research_protocol.py",
+      "sha256": "caca47c4578b94d7990a920602e57040b54c16971018dc415e8d9a228c42c456"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\runtime.py",
+      "sha256": "65263e4de9b6d0d830b7148e46d6ddbe4f621ce4dc97f3249b0d87c8ea40ebf6"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\split_data.py",
+      "sha256": "79214a4c39c27c7a03e79833d0e2bb7c6f04d277d53b7e0b10000ba0e59ff917"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\stage1_mlp.py",
+      "sha256": "af17650b75472101dc4ca21e157e7ff10407b55e5db3815fdb18123bc0f74ed5"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\stage1_protocol.py",
+      "sha256": "32c3d5aff831c93ca931e262db0ec9c6b4123e6c9dad962f16e697368df59eff"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\stage1_xgboost.py",
+      "sha256": "dac0570329f28056a5300c0852ec58933cb5b9fae9cfc428e61365a3415c6a70"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\stage2.py",
+      "sha256": "bdf7bf950ce67b96194c13de0293f031803ee83eb5702e92b65f854d89ff5457"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\training_utils.py",
+      "sha256": "5be1fae0ea6f04b4f138de7a78ccad0b8166eb24027e72ac89a6fcbb88cdf389"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\src\\utils.py",
+      "sha256": "234a26d94b66cb2a4c2b8fff51e77f59a995b9b38f82ab05f120d4490ffb6e2a"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\00_audit_dataset.py",
+      "sha256": "2152b0922aba93068e0d9588ebe5cc8cc20431439045b1f35368d3e0ff572bcb"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\01_prepare_data.py",
+      "sha256": "52f64f04bd2a42a4f820d0b267e70c801a1fdabd35f54e4a98f1b4a8de3c6793"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\01b_prepare_protocol.py",
+      "sha256": "fc16cdc5be240ae1cc44b3fa928f9530582c8e786f1d2019ee27ff57d9563983"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\02_train_autoencoder.py",
+      "sha256": "dc39fbca35d9cfc888bae5842b2125f6ac0dfa1244242a62137ba15b2c0270e7"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\03_train_stage1.py",
+      "sha256": "6432896ea1360ec46b0692cca377b9094be7e248628984834ea2761c3f2da43f"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\04_train_stage2.py",
+      "sha256": "a0891c3542661ca198876a3a79546c6fbfb4c96d5eebbd5f5dcd3933fb0fe578"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\05_train_novelty.py",
+      "sha256": "dad6ad38a57ff16b984c4944010d82c2b1b14333d9e067f18529da6f4caed21c"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\06_evaluate_pipeline.py",
+      "sha256": "7a2af8c38f7ce802bf351c71c62b58139159ac9763d542490fef89e3c67d7fe0"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\07_inspect_external.py",
+      "sha256": "ca2d09824575507eae7dbf737e31e425a980d0146b44635f7a073fcbd48b4e1d"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\08_run_research_round.py",
+      "sha256": "3cfc4c048d37a98df0cbccbacccefc91087b79844daa4d1cb12787ff316c2541"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\09_run_cse_cic_ids2018.py",
+      "sha256": "3e34096e2d549585965813ac74b33c5f550d8c77d6f8f45ba87ee6b1ec3e4af4"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\10_run_cic_unsw_nb15.py",
+      "sha256": "fd5d4602f20b45b9b33e6c40c1d8e86f6237b81b640539ff7acc3bed6524e111"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\11_run_loaco_finetuning.py",
+      "sha256": "463b78ed2cc4f6a0b8b2c577e73cfa6ccd34a0b6090eae9979e0a5d7579b1c48"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\12_select_gate_threshold.py",
+      "sha256": "ce13940938ca50c1100f13268f10a0bdaf9063aa0671051785c1bb1695b00623"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\13_run_recall_gate_study.py",
+      "sha256": "67ec9a4bee2a88d87727fd8254959497dae5a261855e4969841dd3d84a43500a"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\14_run_mahalanobis_comparison.py",
+      "sha256": "1521c47790593837c4a3baa448a6a1a34c26648e2c6c7627abdfc074a2f6daf3"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\15_run_knn_distance_study.py",
+      "sha256": "41d42066d45b40071e36c4b7797863402acb90647d72659a76daacc71230543c"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\check_cse_cic_2018.py",
+      "sha256": "d2a934db724cbaa9db0a78a108dd5189f815a0390d22fe73e90a8c453135adee"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\inspect_cic_unsw.py",
+      "sha256": "8c20724b274e285cbf7537b8393fc81687f2fb9a71f7aa388b2238b4983608df"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\maintenance_archive_old_runs.py",
+      "sha256": "324f761fffdfa434734691efbe51a4060a3eb57b1a3bfbdb7d37bb1592e7c3b1"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\scripts\\verify_environment.py",
+      "sha256": "5ecf161d78784ef0bec05e5e5f1ca0a75203e561491a422314d41e66ff1d60cb"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\pipeline\\knn_v1_h9_balanced_none_k1_recall\\metrics.json",
+      "sha256": "cb3e30277d787458cc65d78edca6a6cefb42ac61672b3166617212b3d80fca94"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\pipeline\\knn_v1_h9_balanced_none_k1_recall\\test_predictions.csv.gz",
+      "sha256": "71849eb9e6f868493e274a484e4e934800e5904c2aad18d6c5c79c74aa8d8d4a"
+    }
+  ],
+  "parents": [
+    {
+      "path": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\experiments\\recall_gate_v1_20261027_h9_s42\\stage1_xgboost_latent_p_attack_all.npy",
+      "sha256": "55e4c19748b9abd4b086d8622e8de4b02709c4ccf975596a1620fb95aae90a34"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\experiments\\recall_gate_v1_20261027_h9_s42\\stage1_xgboost_latent_p_attack_all.npy.contract.json",
+      "sha256": "63bd8d40dc3835fd4a61d3939ab44328e8c326eb52649e429a59d7dcc4ee49b7"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\stage2\\recall_gate_v1_20261027_h9_s42\\latent_only\\contract.json",
+      "sha256": "3967db1cc43469d751e11fb898f97de4b8b1f70135edd8fd76b216e6bdc1e338"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\knn_studies\\knn_v1\\heldout_9\\balanced_none\\k1\\novelty\\contract.json",
+      "sha256": "03970886550e3593e50413cef6d98ee9eed8c1711d1cdc1ee4eff00442e0dfad"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\knn_studies\\knn_v1\\heldout_9\\balanced_none\\k1\\threshold.json",
+      "sha256": "7f535fbe125aba720e9cdef26774c725ef2891b709894569e661a3338e1cdec3"
+    },
+    {
+      "path": "D:\\CAO HOC\\IDS System\\results\\recall_gate_studies\\recall_gate_v1_20261027\\gate_h9.json",
+      "sha256": "8b375880709517ca71829935360c1fe6d018187413761e831258e9a63346e8fa"
+    }
+  ],
+  "extra": {
+    "protocol": "revised_v1",
+    "run_id": "knn_v1_h9_balanced_none_k1_recall",
+    "test_samples": 314521,
+    "stage1_threshold": 0.04365862160921097,
+    "held_out_label_id": 9,
+    "novelty_method": "knn_distance",
+    "novelty_threshold": 0.32240656997961636,
+    "test_is_evaluation_only": true
+  }
+}

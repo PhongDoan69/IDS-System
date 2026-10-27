@@ -1,0 +1,12 @@
+{
+  "method": "knn_distance",
+  "variant": "balanced_l2_k50",
+  "k": 50,
+  "threshold": 0.010127267400264445,
+  "run_id": "recall_gate_v1_20261027_h9_s42",
+  "held_out_label_id": 9,
+  "selected_on": "known_validation_only",
+  "known_rejection_rate_target": 0.05,
+  "validation_rejection_actual": 0.05000843154522119,
+  "test_used_for_selection": false
+}

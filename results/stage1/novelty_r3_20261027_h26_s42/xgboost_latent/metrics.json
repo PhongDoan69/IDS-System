@@ -1,0 +1,185 @@
+{
+  "protocol": "revised_v1",
+  "run_id": "novelty_r3_20261027_h26_s42",
+  "model": "xgboost",
+  "representation": "latent",
+  "feature_path": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\experiments\\novelty_r3_20261027_h26_s42\\latent_features.npy",
+  "feature_shape": [
+    2096804,
+    16
+  ],
+  "held_out_label_id": 26,
+  "train_samples": 1401162,
+  "validation_samples": 300249,
+  "test_samples": 314521,
+  "oof_folds": 5,
+  "inner_fractions": [
+    0.8,
+    0.1,
+    0.1
+  ],
+  "p_attack_contract": "outer holdout excluded from scaler/AE/classifier fit, stopping and fold calibration",
+  "final_calibration": "raw outer OOF train; applied only to final validation/test",
+  "stage2_representation": "one common encoder; fold-specific coordinates never concatenated",
+  "test_used_for_training_calibration_or_selection": false,
+  "probabilities_path": "D:\\CAO HOC\\IDS System\\data\\processed\\round2_20261027_fp32_s42\\experiments\\novelty_r3_20261027_h26_s42\\stage1_xgboost_latent_p_attack_all.npy",
+  "status": "completed",
+  "raw_oof_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9994611615216513,
+    "balanced_accuracy": 0.9993535244835121,
+    "precision": 0.99825985683832,
+    "recall_detection_rate": 0.9991683339752614,
+    "f1": 0.9987138888084478,
+    "false_positive_rate": 0.00046128500823723227,
+    "false_negative_rate": 0.0008316660247386558,
+    "roc_auc": 0.9999910344640662,
+    "average_precision": 0.9999706794704281,
+    "pr_auc": 0.9999706794704281,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 1401162,
+    "brier_score": 0.0004312638775445521,
+    "confusion_matrix": [
+      [
+        1107264,
+        511
+      ],
+      [
+        244,
+        293143
+      ]
+    ]
+  },
+  "oof_train_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9995196843762534,
+    "balanced_accuracy": 0.9992740179123325,
+    "precision": 0.9988547510787836,
+    "recall_detection_rate": 0.9988513465150126,
+    "f1": 0.998853048793997,
+    "false_positive_rate": 0.0003033106903477692,
+    "false_negative_rate": 0.0011486534849874056,
+    "roc_auc": 0.999990853886297,
+    "average_precision": 0.9999703222648784,
+    "pr_auc": 0.9999703222648784,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 1401162,
+    "brier_score": 0.00039096237742342055,
+    "confusion_matrix": [
+      [
+        1107439,
+        336
+      ],
+      [
+        337,
+        293050
+      ]
+    ]
+  },
+  "before_calibration_metrics": {
+    "validation": {
+      "threshold": 0.5,
+      "accuracy": 0.9995370509144077,
+      "balanced_accuracy": 0.9994791984956272,
+      "precision": 0.9984109327824567,
+      "recall_detection_rate": 0.9993796624727608,
+      "f1": 0.9988950627588454,
+      "false_positive_rate": 0.0004212654815064454,
+      "false_negative_rate": 0.0006203375272391799,
+      "roc_auc": 0.9999794185388126,
+      "average_precision": 0.9999554323208742,
+      "pr_auc": 0.9999554323208742,
+      "pr_auc_definition": "average_precision; undefined here when only one true class",
+      "support": 300249,
+      "brier_score": 0.0003891696105711162,
+      "confusion_matrix": [
+        [
+          237280,
+          100
+        ],
+        [
+          39,
+          62830
+        ]
+      ]
+    },
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.9991224751288468,
+      "balanced_accuracy": 0.9986661002960213,
+      "precision": 0.9986506299222815,
+      "recall_detection_rate": 0.9977703166928092,
+      "f1": 0.9982102792223793,
+      "false_positive_rate": 0.0004381161007667032,
+      "false_negative_rate": 0.0022296833071907287,
+      "roc_auc": 0.9999859843394441,
+      "average_precision": 0.9999614176636109,
+      "pr_auc": 0.9999614176636109,
+      "pr_auc_definition": "average_precision; undefined here when only one true class",
+      "support": 314521,
+      "brier_score": 0.000732786487787962,
+      "confusion_matrix": [
+        [
+          237276,
+          104
+        ],
+        [
+          172,
+          76969
+        ]
+      ]
+    }
+  },
+  "validation_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9995736871729798,
+    "balanced_accuracy": 0.9993912804586539,
+    "precision": 0.9988867861516197,
+    "recall_detection_rate": 0.9990774467543623,
+    "f1": 0.9989821073558648,
+    "false_positive_rate": 0.00029488583705451174,
+    "false_negative_rate": 0.0009225532456377547,
+    "roc_auc": 0.9999794185388126,
+    "average_precision": 0.999955432320874,
+    "pr_auc": 0.999955432320874,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 300249,
+    "brier_score": 0.00034356772084720433,
+    "confusion_matrix": [
+      [
+        237310,
+        70
+      ],
+      [
+        58,
+        62811
+      ]
+    ]
+  },
+  "test_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.9988585817799129,
+    "balanced_accuracy": 0.997948736667138,
+    "precision": 0.9991808394445312,
+    "recall_detection_rate": 0.9961628705876252,
+    "f1": 0.9976695726684367,
+    "false_positive_rate": 0.0002653972533490606,
+    "false_negative_rate": 0.0038371294123747423,
+    "roc_auc": 0.9999859843394441,
+    "average_precision": 0.999961417663611,
+    "pr_auc": 0.999961417663611,
+    "pr_auc_definition": "average_precision; undefined here when only one true class",
+    "support": 314521,
+    "brier_score": 0.0009194426238536835,
+    "confusion_matrix": [
+      [
+        237317,
+        63
+      ],
+      [
+        296,
+        76845
+      ]
+    ]
+  }
+}

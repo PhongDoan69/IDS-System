@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--stage2-metadata", required=True)
     parser.add_argument(
         "--methods", nargs="+",
-        choices=["max_probability", "one_class_svm", "isolation_forest"],
+        choices=["max_probability", "one_class_svm", "isolation_forest", "mahalanobis", "knn_distance"],
         default=["max_probability", "one_class_svm", "isolation_forest"],
     )
     parser.add_argument("--check-only", action="store_true")
@@ -155,10 +155,18 @@ def main() -> None:
 
     rejection_rate = float(config["novelty"]["known_rejection_rate"])
     save_json(metadata_path, {**plan, 'status': 'running'})
+    matched = bool({'mahalanobis', 'knn_distance'} & set(args.methods))
+    if matched and (len(args.methods) != 3 or set(args.methods) != {'max_probability', 'mahalanobis', 'knn_distance'}):
+        raise ValueError('Matched distance benchmark requires exactly MCP, Mahalanobis and kNN together')
     validation_features = np.asarray(arrays.features[validation_indices], dtype=np.float32)
     test_features = np.asarray(arrays.features[test_indices], dtype=np.float32)
     results = []
-    if "max_probability" in args.methods:
+    if matched:
+        from src.novelty_benchmark import fit_matched_novelty
+        results = fit_matched_novelty(arrays.features, labels, train_known, validation_indices, test_indices,
+                                     validation_probabilities, test_probabilities, rejection_rate, seed,
+                                     output_dir, model_dir)
+    if "max_probability" in args.methods and not matched:
         results.append(score_max_probability(
             np.asarray(validation_probabilities), np.asarray(test_probabilities), rejection_rate
         ))
@@ -216,7 +224,8 @@ def main() -> None:
     np.save(output_dir / 'test_indices.npy', test_indices)
     write_contract(output_dir, config, run_id, args.held_out_label_id, 'novelty',
                    parents=[latent_path, sidecar(latent_path), sidecar(stage2_dir), p_path, sidecar(p_path), metadata_path,
-                            *sorted(threshold_dir.glob('*.json')), *sorted(model_dir.glob('*.joblib'))], extra=plan)
+                            *sorted(threshold_dir.glob('*.json')), *sorted(p for p in model_dir.glob('*') if p.is_file())], extra=plan)
+    arrays.close()
     print(f"Đã lưu novelty scores/metrics: {output_dir}")
 
 

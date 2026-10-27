@@ -1,0 +1,3 @@
+# Preserve the exact bytes of experimental evidence, including Windows newlines.
+# Local artifact contracts contain SHA-256 hashes of these original files.
+results/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

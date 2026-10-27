@@ -1,0 +1,38 @@
+{
+  "random_state": 42,
+  "data": {
+    "raw_dir": "CICIDS2017",
+    "files": [
+      "monday.csv",
+      "tuesday.csv",
+      "wednesday.csv",
+      "thursday.csv",
+      "friday.csv"
+    ],
+    "chunksize": 100000,
+    "duplicate_policy": "drop_exact",
+    "attempted_policy": "preserve"
+  },
+  "features": {
+    "excluded": [
+      "Label",
+      "Attempted Category",
+      "Timestamp",
+      "Src IP dec",
+      "Dst IP dec"
+    ],
+    "dtype": "float32"
+  },
+  "split": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "outputs": {
+    "interim_dir": "data/interim",
+    "processed_dir": "data/processed",
+    "metadata_dir": "artifacts/metadata",
+    "preprocessors_dir": "artifacts/preprocessors",
+    "results_dir": "results"
+  }
+}
